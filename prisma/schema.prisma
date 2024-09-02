@@ -12,7 +12,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//1-As a reminder, make sure to use the Pascal naming convention.So we 
+//1-As a reminder, make sure to use the "Pascal naming convention".So we 
 //capitalize the first letter of each word and also make sure to use 
 //singular names.
 
@@ -21,7 +21,7 @@ datasource db {
 //191 characters in these columns.We can override it by using @db 
 //attribute
 
-//3-if you want to have really long descriptions.So for that we use 
+//3-if you want to have really "long descriptions".So for that we use 
 //@db.Text.
 
 model Issue {
@@ -41,17 +41,17 @@ enum Status {
 
 //4-Now every issue has to have a "status" and the "status" can be one 
 //of three values, "open", "in progress" and "closed".We can use an 
-//"enum" to represent that.
+//"enum" class to represent that.
 
-//5-An enum is a special "class" that represents a group of constants 
+//5-An "enum" is a special "class" that represents a group of constants 
 //(unchangeable variables).Enums allow a developer to define a set of
 //named constants. Using enums can make it easier to document intent, 
 //or create a set of distinct cases. TypeScript provides both numeric 
 //and string-based enums.
 
-//6-Just remember that "enums" are supported in MySQL but not necessarily
-//in all database engines.So if you use a different provider, look at 
-//the Prisma documentation to make sure that enums are supported.
+//6-Just remember that "enums" are supported in "MySQL" but not necessarily
+//in all "database engines".So if you use a different provider, look at 
+//the Prisma documentation to make sure that "enums" are supported.
 
 //7-With "@updatedAt attribute"  every time an issue record is updated, the 
 //database engine automatically updates the value of this column in 
