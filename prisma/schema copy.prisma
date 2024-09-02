@@ -1,0 +1,16 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+//3-11-Setting Up Prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//1-In this file, first we have to change our provider from Postgres 
+//to MySQL.
+//Go to .env
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}

@@ -1,7 +1,4 @@
-// 3-14-Setting Up Radix UI
-import '@radix-ui/themes/styles.css'
-import { Theme } from "@radix-ui/themes"
-
+// 2-8-Building the navbar
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -22,12 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme>
         <NavBar />
         <main>
           {children}
         </main>
-        </Theme>
       </body>
     </html>
   )
