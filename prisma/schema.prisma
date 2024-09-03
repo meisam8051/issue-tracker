@@ -19,9 +19,9 @@ datasource db {
 //2-Now when we use MySQL, the type of the related column in our database
 //is going to be varchar(191).It means we can store string values up to 
 //191 characters in these columns.We can override it by using @db 
-//attribute
+//attribute.
 
-//3-if you want to have really "long descriptions".So for that we use 
+//3-if you want to have really "long descriptions",So for that we use 
 //@db.Text.
 
 model Issue {
@@ -53,6 +53,6 @@ enum Status {
 //in all "database engines".So if you use a different provider, look at 
 //the Prisma documentation to make sure that "enums" are supported.
 
-//7-With "@updatedAt attribute"  every time an issue record is updated, the 
-//database engine automatically updates the value of this column in 
+//7-With "@updatedAt attribute"  every time an issue record is updated,
+//the database engine automatically updates the value of this column in 
 //database

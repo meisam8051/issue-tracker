@@ -13,7 +13,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     //validation with zod
     const validation = createdIssues.safeParse(body)
-    console.log(validation)
     if (!validation.success) {
         return NextResponse.json(validation.error.errors, { status: 400 })
     }
