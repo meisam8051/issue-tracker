@@ -1,20 +1,12 @@
-// 3-15-Building the New Issue Page
-
+// 3-17-Adding a Markdown Editor
 "use client"
 
-import { Button, TextArea, TextField } from '@radix-ui/themes'
+import { Button, TextField } from '@radix-ui/themes'
 import React from 'react'
+//1- we import the simple MD component and a corresponding CSS file.
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
-//3-When we click on New Issue button, we get an error saying cannot 
-//access "Textfield.root" on the server.So because we're building a 
-//form and building forms requires "user interaction", so the Textfield 
-//component cannot be rendered "on the server".So we should change it to
-//"client component".(figure 15-3)
-
-//4-Right after that, we want to add a text area.you will find the 
-//text area component in documentaion of radix.(figure 15-4) and apply
-//it here.
-//In the end we have this.(figure 15-5)
 
 const NewIssuePage = () => {
   return (
@@ -22,10 +14,12 @@ const NewIssuePage = () => {
       <TextField.Root>
         <TextField.Input placeholder='title' />
       </TextField.Root>
-      <TextArea placeholder='Description'/>
+      {/* 2-then we replace <TeaxtArea> with <SimpleMDE> */}
+      <SimpleMDE placeholder='Description'/>
       <Button>Submit New Issue</Button>
     </div>
   )
 }
+//3-Now we have this markdown editor.(fig 17-2).We can also customize it.
 
 export default NewIssuePage
