@@ -1,22 +1,26 @@
-// 3-19-Handling Errors
+// 3-20-Implementing Client-side Validation
 
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { createdIssuesSchema } from "@/app/validationSchemas";
 
-const createdIssues = z.object({
-    //3-Now we can also customize these error messages.By adding the 
-    //second argument to the min method,we can provide a custom error.
-    //(fig 19-3)
-     
-    title: z.string().min(1,"Title is required.").max(255),
-    description: z.string().min(1,"Description is required.")
-})
+//1-We can also use this schema for validating our form in client-side.
+//So we have to grab this schema and put it into a separate module so 
+//we can reuse it in two places.
+//For doing that we use the refactoring commands in VScode.We put the
+//cursor in our credentialIssues constant and right click and choose 
+//refactor command(fig 20-1).Then choose "move to a new file" option.
+//(fig 20-2).Or we can manually do that
+//Go to app/validationSchemas.ts
+
+// const createdIssues = z.object({  
+//     title: z.string().min(1,"Title is required.").max(255),
+//     description: z.string().min(1,"Description is required.")
+// })
 
 export async function POST(request: NextRequest) {
     const body = await request.json()
-    //validation with zod
-    const validation = createdIssues.safeParse(body)
+    const validation = createdIssuesSchema.safeParse(body)
     if (!validation.success) {
         return NextResponse.json(validation.error.format(), { status: 400 })
     }
@@ -29,16 +33,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newIssue, { status: 201 })
 }
 
-
-
-//4-Now, in this case, we don't really care about these error messages
-//because we shouldn't be able to post the form if the form is invalid.
-//For that we're going to use Client-side validation.But this technique
-//is useful in situations where we have to rely on the backend to 
-//validate the data.For example, if you want to build a registration 
-//form, we want to make sure that the user selects a unique username.
-//That's not something that we can validate on the client.We have to 
-//rely on the backend.In those cases, this is how we can read the 
-//error messages returned from the server and then we can show that 
-//error to the user.
-//Go to app/issues/page copy 9.tsx 
