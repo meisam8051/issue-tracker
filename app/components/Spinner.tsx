@@ -1,4 +1,5 @@
-import React from 'react'
+//3-22-Adding a Spinner
+import React from 'react';
 
 //1-We created a reusable component and put the spinner code here.
 const Spinner = () => {

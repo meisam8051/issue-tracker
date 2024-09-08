@@ -7,13 +7,13 @@ import { createdIssuesSchema } from "@/app/validationSchemas";
 //1-We can also use this schema for validating our form in client-side.
 //So we have to grab this schema and put it into a separate module so 
 //we can reuse it in two places.
-//For doing that we use the refactoring commands in VScode.We put the
-//cursor in our credentialIssues constant and right click and choose 
+//For doing that we use the "refactoring commands" in VScode.We put the
+//cursor in our createdIssues constant and right click and choose 
 //refactor command(fig 20-1).Then choose "move to a new file" option.
-//(fig 20-2).Or we can manually do that
+//(fig 20-2).Or we can manually do that.
 //Go to app/validationSchemas.ts
 
-// const createdIssues = z.object({  
+// const createdIssuesSchema = z.object({  
 //     title: z.string().min(1,"Title is required.").max(255),
 //     description: z.string().min(1,"Description is required.")
 // })
