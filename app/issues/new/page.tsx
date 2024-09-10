@@ -42,19 +42,19 @@ const NewIssuePage = () => {
     }
 
   })
-  //2-Some people argue that using axiots in the middle of a component 
-  //violates the separation of concerns principle.What is separation of 
+  //2-Some people argue that using axios in the middle of a component 
+  //violates the "separation of concerns principle".What is separation of 
   //concerns?it's one of the old computer science principles that says 
   //we should separate a program into distinct modules each having a 
   //separate concern.If concerns are well separated, there are more 
-  //opportunities for code reuse.
+  //opportunities for "code reuse".
   //I don't see any value in moving this logic inside a separate function.
   //This is the only place where we need to create an issue.So we're not 
   //going to reuse this function in other parts of our application.
   //But in other applications, making HTTP calls might be more complicated.
   //For example, sometimes when calling third party APIs, we have to 
-  //include certain HTTP headers in each request.In those cases, we don't
-  //want to throw all that complexity inside our components, so it's 
+  //"include certain HTTP headers" in "each request".In those cases, we 
+  //don't want to throw all that complexity inside our components, so it's 
   //better to move the logic for making HTTP calls into separate modules.
 
 

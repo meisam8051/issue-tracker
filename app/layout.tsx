@@ -1,6 +1,6 @@
 // 3-16-Customizing Radix UI Theme
 import '@radix-ui/themes/styles.css'
-import "./theme-config.css" 
+import "./theme-config.css"
 import './globals.css'
 import { Theme } from "@radix-ui/themes"
 
@@ -40,7 +40,7 @@ export default function RootLayout({
       of "inter.className"  */}
       {/* <body className={inter.className}> */}
       <body className={inter.variable}>
-        <Theme appearance="light" accentColor="violet">
+        <Theme accentColor="violet">
           <NavBar />
           <main className='px-5'>
             {children}
