@@ -1,4 +1,4 @@
-//4-25-Building the Issue status Badge
+//4-26-Adding Loading Skeletons
 
 
 import prisma from '@/prisma/client'
@@ -6,16 +6,20 @@ import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
+import delay from "delay"
+import IssueAction from './IssueActions'
 
 const IssuePage = async () => {
+
+  await delay(2000)
 
   const issues = await prisma.issue.findMany()
 
   return (
     <div>
-      <div className='mb-5'>
-        <Button><Link href="/issues/new">New Issues</Link></Button>
-      </div>
+      {/* 10----------
+      Go to loading.tsx */}
+      <IssueAction />
       <Table.Root variant='surface' >
         <Table.Header>
           <Table.Row>
@@ -27,7 +31,6 @@ const IssuePage = async () => {
         <Table.Body>
           {issues.map((issue) =>
             <Table.Row key={issue.id}>
-              {/* 9------------------- (fig 25-4) */}
               <Table.Cell>{issue.title}
                 <div className='block md:hidden'>
                   <IssueStatusBadge status={issue.status} />
@@ -37,7 +40,6 @@ const IssuePage = async () => {
               <Table.Cell className='hidden md:table-cell'>
                 <IssueStatusBadge status={issue.status} />
               </Table.Cell>
-              {/* --------------------- */}
               <Table.Cell className='hidden md:table-cell'>{issue.creatdAt.toDateString()}</Table.Cell>
             </Table.Row>
           )}
@@ -47,8 +49,6 @@ const IssuePage = async () => {
   )
 }
 
-//10-For testing we can go to datagrip and change the status of some data.
-//(fig 25-5)
 
 
 export default IssuePage
