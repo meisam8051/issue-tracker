@@ -11,7 +11,7 @@ const loadingIssuePage = () => {
     const issues = [1, 2, 3, 4, 5]
     return (
         <div>
-            {/* 11---------- */}
+            {/* 11---------- (fig 26-2*/}
             <IssueAction />
             <Table.Root variant='surface' >
                 <Table.Header>

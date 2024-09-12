@@ -1,8 +1,6 @@
-//4-26-Adding Loading Skeletons
-
-
+//4-27-Showing Issue Details
 import prisma from '@/prisma/client'
-import { Button, Table } from '@radix-ui/themes'
+import { Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
@@ -17,8 +15,6 @@ const IssuePage = async () => {
 
   return (
     <div>
-      {/* 10----------
-      Go to loading.tsx */}
       <IssueAction />
       <Table.Root variant='surface' >
         <Table.Header>
@@ -31,7 +27,10 @@ const IssuePage = async () => {
         <Table.Body>
           {issues.map((issue) =>
             <Table.Row key={issue.id}>
-              <Table.Cell>{issue.title}
+              <Table.Cell>
+                {/* 5-Now here we should add link to our IssueDetailPage
+                  */}
+                <Link href={`issues/${issue.id}`}>{issue.title}</Link>
                 <div className='block md:hidden'>
                   <IssueStatusBadge status={issue.status} />
                 </div>
@@ -49,6 +48,12 @@ const IssuePage = async () => {
   )
 }
 
+//6-Because we added a loading page in our issues folder and this loading
+//file will be used for any route that starts with issues,we see that is
+//rendered for all our route that starts with issues.
+//Now to fix that we have to add separate loading files for the other 
+//segments of this route.
+//Go to issues/[id]/loading.tsx
 
 
 export default IssuePage
