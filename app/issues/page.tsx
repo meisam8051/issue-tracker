@@ -48,10 +48,10 @@ const IssuePage = async () => {
   )
 }
 
-//6-Because we added a loading page in our issues folder and this loading
-//file will be used for any route that starts with issues,we see that is
-//rendered for all our route that starts with issues.
-//Now to fix that we have to add separate loading files for the other 
+//6-Because we added a "loading page" in our "issues folder" and this 
+//"loading file" will be used for any route that starts with /issues/,we 
+//see that is rendered for all our route that starts with /issues/.
+//Now to fix that we have to add "separate loading files" for the other 
 //segments of this route.
 //Go to issues/[id]/loading.tsx
 
