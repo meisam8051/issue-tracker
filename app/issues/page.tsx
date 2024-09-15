@@ -1,13 +1,15 @@
-//4-27-Showing Issue Details
+//4-30-Building a Styled Link Component
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
-import Link from 'next/link'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
 import delay from "delay"
 import IssueAction from './IssueActions'
 
+import Link from '../components/Link'
+
 const IssuePage = async () => {
+
 
   await delay(2000)
 
@@ -28,9 +30,11 @@ const IssuePage = async () => {
           {issues.map((issue) =>
             <Table.Row key={issue.id}>
               <Table.Cell>
-                {/* 5-Now here we should add link to our IssueDetailPage
-                  */}
-                <Link href={`issues/${issue.id}`}>{issue.title}</Link>
+             
+                <Link
+                  href={`issues/${issue.id}`}
+                >{issue.title}
+                </Link>
                 <div className='block md:hidden'>
                   <IssueStatusBadge status={issue.status} />
                 </div>
@@ -47,13 +51,5 @@ const IssuePage = async () => {
     </div>
   )
 }
-
-//6-Because we added a "loading page" in our "issues folder" and this 
-//"loading file" will be used for any route that starts with /issues/,we 
-//see that is rendered for all our route that starts with /issues/.
-//Now to fix that we have to add "separate loading files" for the other 
-//segments of this route.
-//Go to issues/[id]/loading.tsx
-
 
 export default IssuePage

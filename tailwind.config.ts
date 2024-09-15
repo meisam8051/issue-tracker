@@ -17,7 +17,7 @@ const config: Config = {
     },
   },
   //1------------
-  //Go back to issues/[id]/page copy 5.tsx
-  plugins: [require('@tailwindcss/typography'),],
+  //Go to issues/[id]/page copy 5.tsx
+  plugins: [require('@tailwindcss/typography')],
 }
 export default config

@@ -26,8 +26,8 @@ const IssueDetailPage = async ({ params }: Props) => {
                 <IssueStatusBadge status={issue.status} />
                 <Text>{issue.creatdAt.toDateString()}</Text>
             </Flex>
-         {/* 5-Third we have to add the prose class to the containing 
-         element. */}
+         {/* 5-Third we have to add the "prose class" to the containing 
+         element.(here the containing element is Card) */}
             <Card className='prose' mt="4"><ReactMarkdown>{issue.description}</ReactMarkdown></Card>
         </div>
     )
