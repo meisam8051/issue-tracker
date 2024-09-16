@@ -1,10 +1,11 @@
-// 3-23-Discussion-Code Organization
+// 4-32-Disabling Server-side Rendering
 "use client"
 
 import { Button, Callout, Text, TextField } from '@radix-ui/themes'
 import React, { useState } from 'react'
 import { useForm, Controller } from "react-hook-form";
-import SimpleMDE from "react-simplemde-editor";
+//1-Instead of statically importing the simple MDE component,
+// import SimpleMDE from "react-simplemde-editor";
 import axios from 'axios';
 import "easymde/dist/easymde.min.css";
 import { useRouter } from 'next/navigation';
@@ -14,6 +15,16 @@ import { createdIssuesSchema } from '@/app/validationSchemas';
 import { z } from "zod"
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
+
+//2-we have to import the dynamic
+import dynamic from 'next/dynamic';
+//3-Then we dynamically load this component.This is called lazy loading.
+const SimpleMDE = dynamic(
+  () => import("react-simplemde-editor"),
+  { ssr: false }//4-We tell next JS not to render this component on the 
+  //server.
+
+)
 
 type IssueForm = z.infer<typeof createdIssuesSchema>
 
@@ -30,7 +41,6 @@ const NewIssuePage = () => {
     resolver: zodResolver(createdIssuesSchema)
   })
 
-  //1-----------
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsSubmitting(true)
@@ -42,21 +52,6 @@ const NewIssuePage = () => {
     }
 
   })
-  //2-Some people argue that using axios in the middle of a component 
-  //violates the "separation of concerns principle".What is separation of 
-  //concerns?it's one of the old computer science principles that says 
-  //we should separate a program into distinct modules each having a 
-  //separate concern.If concerns are well separated, there are more 
-  //opportunities for "code reuse".
-  //I don't see any value in moving this logic inside a separate function.
-  //This is the only place where we need to create an issue.So we're not 
-  //going to reuse this function in other parts of our application.
-  //But in other applications, making HTTP calls might be more complicated.
-  //For example, sometimes when calling third party APIs, we have to 
-  //"include certain HTTP headers" in "each request".In those cases, we 
-  //don't want to throw all that complexity inside our components, so it's 
-  //better to move the logic for making HTTP calls into separate modules.
-
 
   return (
     <div className='max-w-xl'>
@@ -65,7 +60,7 @@ const NewIssuePage = () => {
           {error}
         </Callout.Text>
       </Callout.Root>}
-      {/* 1------------------------------------- */}
+
       <form className=' space-y-3' onSubmit={onSubmit}>
 
         <TextField.Root>
@@ -75,7 +70,13 @@ const NewIssuePage = () => {
         <Controller
           name='description'
           control={control}
-          render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
+          render={({ field }) => {
+            //5-After that we got another error that we solve that
+            //like this (fig 32-3 32-4 )
+            const { ref, ...rest } = field;
+            return <SimpleMDE placeholder='Description'  {...rest} />
+          }}
+
         />
 
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
