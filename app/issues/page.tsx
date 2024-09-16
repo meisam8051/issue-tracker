@@ -1,12 +1,15 @@
-//4-30-Building a Styled Link Component
+//4-33-Refactoring- Organizing Imports
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
 import React from 'react'
-import IssueStatusBadge from '../components/IssueStatusBadge'
+//3-------
+import {Link,IssueStatusBadge} from "@/app/components"
+//--------
 import delay from "delay"
 import IssueAction from './IssueActions'
 
-import Link from '../components/Link'
+
+//Go back to index.ts
 
 const IssuePage = async () => {
 
