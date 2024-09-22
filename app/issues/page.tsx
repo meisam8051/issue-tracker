@@ -9,7 +9,7 @@ import delay from "delay"
 import IssueAction from './IssueActions'
 
 
-//Go back to index.ts
+//Go back to index copy 2.ts
 
 const IssuePage = async () => {
 

@@ -4,7 +4,8 @@
 import { Button, Callout, Text, TextField } from '@radix-ui/themes'
 import React, { useState } from 'react'
 import { useForm, Controller } from "react-hook-form";
-//1-Instead of statically importing the simple MDE component,
+//1-Instead of statically importing the SimpleMDE component,we import it
+//dynamically.
 // import SimpleMDE from "react-simplemde-editor";
 import axios from 'axios';
 import "easymde/dist/easymde.min.css";
@@ -16,14 +17,14 @@ import { z } from "zod"
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
 
-//2-we have to import the dynamic
+//2-we import the dynamic function
 import dynamic from 'next/dynamic';
+import delay from 'delay';
 //3-Then we dynamically load this component.This is called lazy loading.
 const SimpleMDE = dynamic(
   () => import("react-simplemde-editor"),
   { ssr: false }//4-We tell next JS not to render this component on the 
   //server.
-
 )
 
 type IssueForm = z.infer<typeof createdIssuesSchema>
@@ -31,6 +32,7 @@ type IssueForm = z.infer<typeof createdIssuesSchema>
 
 
 const NewIssuePage = () => {
+
   const router = useRouter()
 
   const [error, setError] = useState("");
@@ -72,8 +74,9 @@ const NewIssuePage = () => {
           control={control}
           render={({ field }) => {
             //5-After that we got another error that we solve that
-            //like this (fig 32-3 32-4 )
+            //like this (fig 32-4 )
             const { ref, ...rest } = field;
+            //--------------------------------
             return <SimpleMDE placeholder='Description'  {...rest} />
           }}
 

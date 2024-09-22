@@ -2,7 +2,9 @@
 
 import { Box } from '@radix-ui/themes'
 import React from 'react'
-import {Skeleton} from "@/app/components/index"
+//12-
+import { Skeleton } from "@/app/components/index"
+
 
 
 const LoadingNewIssuePage = () => {

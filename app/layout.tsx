@@ -21,7 +21,8 @@ import NavBar from './NavBar'
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter'
+  variable: '--font-inter',
+  preload: true,
 })
 
 export const metadata: Metadata = {
