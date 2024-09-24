@@ -2,7 +2,7 @@
 
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { createdIssuesSchema } from "@/app/validationSchemas";
+import { IssuesSchema } from "@/app/validationSchemas";
 
 //1-We can also use this schema for validating our form in client-side.
 //So we have to grab this schema and put it into a separate module so 
@@ -20,7 +20,7 @@ import { createdIssuesSchema } from "@/app/validationSchemas";
 
 export async function POST(request: NextRequest) {
     const body = await request.json()
-    const validation = createdIssuesSchema.safeParse(body)
+    const validation = IssuesSchema.safeParse(body)
     if (!validation.success) {
         return NextResponse.json(validation.error.format(), { status: 400 })
     }

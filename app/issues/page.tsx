@@ -1,15 +1,11 @@
-//4-33-Refactoring- Organizing Imports
+//5-39-Understanding Caching
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
 import React from 'react'
-//3-------
-import {Link,IssueStatusBadge} from "@/app/components"
-//--------
+import { Link, IssueStatusBadge } from "@/app/components"
 import delay from "delay"
 import IssueAction from './IssueActions'
 
-
-//Go back to index copy 2.ts
 
 const IssuePage = async () => {
 
@@ -33,7 +29,7 @@ const IssuePage = async () => {
           {issues.map((issue) =>
             <Table.Row key={issue.id}>
               <Table.Cell>
-             
+
                 <Link
                   href={`issues/${issue.id}`}
                 >{issue.title}
@@ -54,5 +50,21 @@ const IssuePage = async () => {
     </div>
   )
 }
+
+//1-For rendering our issue page,dynamically,here we export a 
+//constant called 'dynamic' and set it to "force-dynamic",then rebuild 
+//our application.(fig 39-5)
+//Now if users create a new issue they can't see that in issue page but 
+//with a refresh they can see it.(fig 39-6 39-7)That is because of a 
+//diffrent kind of cache, named client cache.  
+export const dynamic = "force-dynamic" 
+
+//2-Another option to export is the revalidate option.If we set this to
+//zero,  this is exactly the same as setting dynamic to force dynamic.
+//So we are telling next JS that the output of this page has to be 
+//revalidated every zero seconds, meaning all the time.
+// export const revalidate = 0;
+//Go back to 5-39-Understanding Caching
+
 
 export default IssuePage

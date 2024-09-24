@@ -1,4 +1,4 @@
-//5-38-Updating Issues
+//5-39-Understanding Caching
 "use client"
 
 import { ErrorMessage, Spinner } from '@/app/components';
@@ -44,13 +44,16 @@ const IssueForm = ({ issue }: Props) => {
     const onSubmit = handleSubmit(async (data) => {
         try {
             setIsSubmitting(true)
-            //1-Here If we have issue, we sent a PATCH request for editing
-            //data,otherwise we send a POST request for creating a data.
             if (issue)
                 await axios.patch("/api/issues/" + issue.id, data)
             else
                 await axios.post("/api/issues", data)
             router.push("/issues")
+            //3-After we send the user to the issues page,we tells next JS
+            //to refresh the content of the current route, which is in 
+            //this case, the issues route.
+            router.refresh()
+            //----------------
         } catch (error) {
             setIsSubmitting(false)
             setError("Unexpected error has occurred!")
@@ -81,8 +84,6 @@ const IssueForm = ({ issue }: Props) => {
 
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                {/*2-we should also set the label of the button 
-                dynamically.  */}
                 <Button disabled={isSubmitting}>
                     {issue ? "Update Issue" : "Submit New Issue"}{" "}
                     {isSubmitting && <Spinner />}</Button>
@@ -90,11 +91,6 @@ const IssueForm = ({ issue }: Props) => {
         </div>
     )
 }
-
-//3-Here after we update an issue,if we go to edit page for that issue
-//we don't see the updated issue that's because of a caching issue.We
-//will solve it in the next lesson.For now just refresh the page and 
-//you'll see the updated issue.
 
 
 export default IssueForm
