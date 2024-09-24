@@ -8,7 +8,7 @@ import { createdIssuesSchema } from "@/app/validationSchemas";
 //So we have to grab this schema and put it into a separate module so 
 //we can reuse it in two places.
 //For doing that we use the "refactoring commands" in VScode.We put the
-//cursor in our createdIssues constant and right click and choose 
+//cursor in our createdIssuesSchema constant and right click and choose 
 //refactor command(fig 20-1).Then choose "move to a new file" option.
 //(fig 20-2).Or we can manually do that.
 //Go to app/validationSchemas.ts
