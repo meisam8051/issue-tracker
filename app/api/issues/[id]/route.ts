@@ -3,11 +3,11 @@ import { IssuesSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-//1-In this route file, we export a patch or a put function for updating
-//an issue.we should use the put function for replacing an object and the
-//patch function for updating one or more properties.
+//1-In this route file, we export a "PATCH" or a "PUT" function for 
+//"updating an issue".we should use the "PUT function" for "replacing an 
+//object" and the "PATCH function" for updating "one or more properties".
 //In this case, we don't want to replace an entire issue.We just want to
-//update the title and description properties.So we use PATCH function.
+//update the "title and description properties".So we use "PATCH function".
 
 export async function PATCH(
   request: NextRequest,
@@ -42,4 +42,4 @@ export async function PATCH(
   return NextResponse.json(updateIssue);
 }
 
-//8-Then we can test it with postman software.
+//8-Then we can test it with "postman software".

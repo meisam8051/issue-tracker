@@ -51,18 +51,19 @@ const IssuePage = async () => {
   )
 }
 
-//1-For rendering our issue page,dynamically,here we export a 
-//constant called 'dynamic' and set it to "force-dynamic",then rebuild 
-//our application.(fig 39-5)
-//Now if users create a new issue they can't see that in issue page but 
-//with a refresh they can see it.(fig 39-6 39-7)That is because of a 
-//diffrent kind of cache, named client cache.  
+//1-For rendering our issue page,dynamically,here we export a constant
+//called 'dynamic' and set it to "force-dynamic",then rebuild our 
+//application.(fig 39-7)
+//Now if users create a new issue they can't see that in issues page but 
+//with a refresh they can see it.(fig 39-8 39-9)That is because of a 
+//diffrent kind of cache, named "client cache".  
 export const dynamic = "force-dynamic" 
 
-//2-Another option to export is the revalidate option.If we set this to
-//zero,  this is exactly the same as setting dynamic to force dynamic.
+//2-Another option to export is the "revalidate option".If we set this to
+//"zero", this is exactly the same as setting "dynamic" to "force dynamic".
 //So we are telling next JS that the output of this page has to be 
-//revalidated every zero seconds, meaning all the time.
+//revalidated every zero seconds, meaning all the time.With this we can
+//give it a time for rerendering issues page.
 // export const revalidate = 0;
 //Go back to 5-39-Understanding Caching
 

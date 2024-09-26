@@ -1,20 +1,7 @@
-//4-33-Refactoring- Organizing Imports
+//5-40- Improving the Loading Experience
 
-import { Box } from '@radix-ui/themes'
-import React from 'react'
-//12-
-import { Skeleton } from "@/app/components/index"
+import IssueFormSkeleton from "../_components/IssueFormSkeleton"
 
+export default IssueFormSkeleton
 
-
-const LoadingNewIssuePage = () => {
-    return (
-        <Box className='max-w-xl'>
-            <Skeleton />
-            <Skeleton height="20rem" />
-        </Box>
-    )
-}
-
-export default LoadingNewIssuePage
-
+//Go to issues/new/page copy 21.tsx
