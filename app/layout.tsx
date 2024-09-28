@@ -1,23 +1,12 @@
-// 3-16-Customizing Radix UI Theme
+//5-41-Adding a Delete Button
 import '@radix-ui/themes/styles.css'
 import "./theme-config.css"
 import './globals.css'
-import { Theme } from "@radix-ui/themes"
+import { Container, Theme } from "@radix-ui/themes"
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
-//2-when using radix UI, the "inter font" is not used by default. 
-//We can go to DevTools and see that.(fig 16-2).we have to do a bit of 
-//configuration to make it work.
-
-//3-For that we go to radix-ui web and on the sidebar, on "Theme section",
-//we go to "Typography" and search for next and here are the instructions
-//for using custom font (here the inter font) with radix UI.(fig 16-3)
-
-//4-So we have to go to our layout file and assign "a custom CSS 
-//variable" to our "inter font"(variable: '--font-inter')
-
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,22 +26,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* 5-Then here we set the "className" to "inter.varible" instead 
-      of "inter.className"  */}
-      {/* <body className={inter.className}> */}
       <body className={inter.variable}>
         <Theme accentColor="violet">
           <NavBar />
           <main className='px-5'>
-            {children}
+            {/* 12-Here we wrap our pages inside the container component.
+             */}
+            <Container>
+              {children}
+            </Container>
           </main>
         </Theme>
       </body>
     </html>
   )
 }
-//6-Next we should create "a custom CSS file" for overriding the styles 
-//of radix UI.So we're going to create a file called "theme-config.css"
-//and in that file, we'll add this style.(figure 16-4)
-
-//Go to app/theme-config.css 
