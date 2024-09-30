@@ -1,18 +1,18 @@
-//6-42-Adding a Confirmation Dialog Box
+//6-44-Deleting an Issue
 
-//2-We should change this component to a client component because we get
-//this error:Cannot access AlertDialog.Root on the server. You cannot 
-//dot into a client module from a server component. You can only pass 
-//the imported name through.(fig 42-2)
-//here we need interaction with the user.
 "use client"
 
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
+
+    //1------------------
+    const router = useRouter()
+
     return (
-        //1-----------------------------
         <AlertDialog.Root>
             <AlertDialog.Trigger>
                 <Button color='red'>Delete Issue</Button>
@@ -27,14 +27,16 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                 </AlertDialog.Description>
                 <Flex mt="4" gap="4">
                     <AlertDialog.Cancel>
-                        {/*3-this button also has a prop called variant 
-                        so we have various flavors of these components.
-                        We can set this to soft and now our button looks
-                        softer.*/}
                         <Button color='gray' variant='soft'>Cancel</Button>
                     </AlertDialog.Cancel>
                     <AlertDialog.Action>
-                        <Button color='red'>Delete Issue</Button>
+                        {/* 1-------- */}
+                        <Button onClick={async () => {
+                            await axios.delete("/api/issues/" + issueId)
+                            router.push("/issues")
+                            router.refresh()
+                        }} color='red'>Delete Issue</Button>
+                        {/* ----------------- */}
                     </AlertDialog.Action>
                 </Flex>
             </AlertDialog.Content>
