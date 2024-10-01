@@ -1,7 +1,9 @@
-//6-45-Handling Errors
+// 6-46-Improving the User Experience
+
 
 "use client"
 
+import { Spinner } from '@/app/components'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -11,16 +13,21 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 
     const router = useRouter()
     const [error, setError] = useState(false)
+    //2-
+    const [isDeleting, setIsDeleting] = useState(false)
 
-    //8-this function has a few lines of code, I would prefer to move it
-    //outside, here.
+
     const deleteIssueHandler = async () => {
         try {
+            //3-
+            setIsDeleting(true)
             await axios.delete("/api/issues/" + issueId)
             router.push("/issues")
             router.refresh()
         }
         catch (error) {
+            //4-
+            setIsDeleting(false)
             setError(true)
         }
     }
@@ -28,7 +35,12 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
     return (
         <AlertDialog.Root>
             <AlertDialog.Trigger>
-                <Button color='red'>Delete Issue</Button>
+                {/* 5-we use spinner and disabling button here */}
+                <Button color='red'
+                    disabled={isDeleting}>
+                    Delete Issue
+                    {isDeleting && <Spinner />}
+                </Button>
             </AlertDialog.Trigger>
             <AlertDialog.Content>
                 <AlertDialog.Title>
@@ -43,7 +55,6 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                         <Button color='gray' variant='soft'>Cancel</Button>
                     </AlertDialog.Cancel>
                     <AlertDialog.Action>
-                        {/* 8- */}
                         <Button onClick={deleteIssueHandler} color='red'>Delete Issue</Button>
                     </AlertDialog.Action>
                 </Flex>

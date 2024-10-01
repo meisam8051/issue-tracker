@@ -1,6 +1,7 @@
-//6-43-Building an API
+// 6-46-Improving the User Experience
 import { IssuesSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
+import delay from "delay";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -34,21 +35,20 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  //1-
+  //1-We use delay function to simulate deleting process in real app.
+  //Go to app/issues/[id]/DeleteIssueButton copy 6.tsx
+  //await delay(2000);
+
   const issue = await prisma.issue.findUnique({
     where: {
       id: parseInt(params.id),
     },
   });
-  //2-
   if (!issue)
     return NextResponse.json({ error: "Invalid issue." }, { status: 404 });
 
-  //3-
   await prisma.issue.delete({
     where: { id: parseInt(params.id) },
   });
-  //4-
   return NextResponse.json({});
 }
-//5-Then we check it with postman
