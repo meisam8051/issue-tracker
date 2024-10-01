@@ -23,9 +23,9 @@ const IssueDetailPage = async ({ params }: Props) => {
     await delay(2000)
     //10-(fig 41-8)on tablets, our buttons are way too wide.So we apply 
     //a two column layout on tablets as well.For that we have to change 
-    //our break points.We want to apply five columns to small devices, 
-    //that is tablets in RadixUI.And apply col-span-4 to medium devices 
-    //in Tailwind.
+    //our break points.We want to apply "five columns" to "small devices", 
+    //that is tablets in "RadixUI".And apply "col-span-4" to "medium 
+    //devices" in "Tailwind".
 
     return (
         <Grid columns={{ initial: "1", sm: "5" }} gap="5" >

@@ -1,19 +1,14 @@
-//5-35- Applying the Single Responsibility Principle
+//6-47-Removing Duplicate Skeletons
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
-//2-Here we create "EditIssueButton component" that is one piece of our 
-//"detail issue page".
-
-//3-this component needs to know the id of the issue to edit.We can 
-//give it as a prop.
-//Go to ./IssueDetails.tsx
 const EditIssueButton = ({ issueId }: { issueId: number }) => {
     return (
         <Button>
             <Pencil2Icon />
-            <Link href={`/issues/${issueId}/edit`}>Edit Issue</Link>
+            {/* 6-Here we chould change the url */}
+            <Link href={`/issues/edit/${issueId}`}>Edit Issue</Link>
         </Button>
     )
 }

@@ -1,5 +1,4 @@
-// 6-46-Improving the User Experience
-
+// 6-47-Removing Duplicate Skeletons
 
 "use client"
 
@@ -13,20 +12,19 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 
     const router = useRouter()
     const [error, setError] = useState(false)
-    //2-
     const [isDeleting, setIsDeleting] = useState(false)
 
 
     const deleteIssueHandler = async () => {
         try {
-            //3-
             setIsDeleting(true)
             await axios.delete("/api/issues/" + issueId)
-            router.push("/issues")
+            //3-We have to change the url to /issues/list
+            //Go to issues/_components/IssueForm copy 5.tsx
+            router.push("/issues/list")
             router.refresh()
         }
         catch (error) {
-            //4-
             setIsDeleting(false)
             setError(true)
         }
@@ -35,7 +33,6 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
     return (
         <AlertDialog.Root>
             <AlertDialog.Trigger>
-                {/* 5-we use spinner and disabling button here */}
                 <Button color='red'
                     disabled={isDeleting}>
                     Delete Issue

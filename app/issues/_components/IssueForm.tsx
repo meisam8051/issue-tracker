@@ -1,4 +1,4 @@
-//5-40- Improving the Loading Experience
+// 6-47-Removing Duplicate Skeletons
 "use client"
 
 import { ErrorMessage, Spinner } from '@/app/components';
@@ -12,18 +12,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import "easymde/dist/easymde.min.css";
 import { Issue } from '@prisma/client';
-//4-So we import it statically.
 import SimpleMDE from 'react-simplemde-editor';
 
-
-//4-With loading dynamically the entire IssueForm we don't need to load
-//dynamically the SimpleMDE component.
-// const SimpleMDE = dynamic(
-//     () => import("react-simplemde-editor"),
-//     { ssr: false }
-// )
-
-//Go to issues/new/page copy 20.tsx
 
 type IssueFormData = z.infer<typeof IssuesSchema>
 
@@ -52,7 +42,10 @@ const IssueForm = ({ issue }: Props) => {
                 await axios.patch("/api/issues/" + issue.id, data)
             else
                 await axios.post("/api/issues", data)
-            router.push("/issues")
+            //4--------
+            //Go back to 6-47-Removing Duplicate Skeletons
+            router.push("/issues/list")
+            //--------
             router.refresh()
         } catch (error) {
             setIsSubmitting(false)
