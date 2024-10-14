@@ -1,23 +1,28 @@
-// 7-49-Configuring Google Provider
+// 7-50-Adding the Prisma Adapter
 
 import NextAuth from "next-auth";
-//2-
 import GoogleProvider from "next-auth/providers/google";
 
+//1----------
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "@/prisma/client";
+//-----------
 const handler = NextAuth({
+  //2----------
+  adapter:PrismaAdapter(prisma),
+  //Go to prisma/schema copy 3.prisma
+  //-----------
   providers: [
-    //3-here we have an error saying type, string, or undefined is not 
-    //assignable to type, string.So the TypeScript compiler doesn't know
-    //that we have this variable in our ENV file.So here we have to add 
-    //an exclamation mark at the end to sell the TypeScript compiler 
-    //that yes, we do have a value for this environment variable.
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  //4----------
+  session :{
+    strategy:"jwt"
+  }
 });
 
 export { handler as GET, handler as POST };
-
 
