@@ -1,4 +1,4 @@
-// 6-47-Removing Duplicate Skeletons
+//5-38-Updating Issues
 "use client"
 
 import { ErrorMessage, Spinner } from '@/app/components';
@@ -6,14 +6,20 @@ import { IssuesSchema } from '@/app/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Callout, TextField, Button } from '@radix-ui/themes';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import "easymde/dist/easymde.min.css";
 import { Issue } from '@prisma/client';
-import SimpleMDE from 'react-simplemde-editor';
 
+
+
+const SimpleMDE = dynamic(
+    () => import("react-simplemde-editor"),
+    { ssr: false }
+)
 
 type IssueFormData = z.infer<typeof IssuesSchema>
 
@@ -38,15 +44,13 @@ const IssueForm = ({ issue }: Props) => {
     const onSubmit = handleSubmit(async (data) => {
         try {
             setIsSubmitting(true)
+            //1-Here If we have issue, we sent a PATCH request for editing
+            //data,otherwise we send a POST request for creating a data.
             if (issue)
                 await axios.patch("/api/issues/" + issue.id, data)
             else
                 await axios.post("/api/issues", data)
-            //4-We should change the URL to "/issues/list"
-            //Go back to 6-47-Removing Duplicate Skeletons
-            router.push("/issues/list")
-            //--------
-            router.refresh()
+            router.push("/issues")
         } catch (error) {
             setIsSubmitting(false)
             setError("Unexpected error has occurred!")
@@ -77,6 +81,8 @@ const IssueForm = ({ issue }: Props) => {
 
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
+                {/*2-we should also set the label of the button 
+                dynamically.  */}
                 <Button disabled={isSubmitting}>
                     {issue ? "Update Issue" : "Submit New Issue"}{" "}
                     {isSubmitting && <Spinner />}</Button>
@@ -84,6 +90,11 @@ const IssueForm = ({ issue }: Props) => {
         </div>
     )
 }
+
+//3-Here after we update an issue,if we go to "edit page" for that issue
+//we don't see the updated issue that's because of a caching issue.We
+//will solve it in the next lesson.For now just refresh the page and 
+//you'll see "the updated issue".
 
 
 export default IssueForm

@@ -1,17 +1,17 @@
-//4-33-Refactoring- Organizing Imports
+//4-26-Adding Loading Skeletons
 import { Table } from '@radix-ui/themes'
 import React from 'react'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import IssueAction from './IssueActions'
 
-//11-
-import {Skeleton} from "@/app/components/index"
-//Go to isues/new/loading.tsx
+
 
 const loadingIssuePage = () => {
     const issues = [1, 2, 3, 4, 5]
     return (
         <div>
-
+            {/* 11---------- (fig 26-2*/}
             <IssueAction />
             <Table.Root variant='surface' >
                 <Table.Header>

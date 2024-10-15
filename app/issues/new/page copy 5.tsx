@@ -42,9 +42,9 @@ const NewIssuePage = () => {
          function for rendering an "input field".This is where we render
          a "simplemde editor".Now the final step, we give this function
          an argument and de-structuring to grab the "field property".Now 
-         this field has the same properties that you saw earlier, like 
-         onBlur, onChange, and so on.So this is where we add braces to 
-         spread the field object.
+         this field has the same properties of the output of register 
+         function that you saw earlier, like onBlur, onChange, and so on.
+         So we spread this field property in SimpleMDE tag.
          Go to new/page copy 6.tsx*/}
       <Button>Submit New Issue</Button>
     </div>

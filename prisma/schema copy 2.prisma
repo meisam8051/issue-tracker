@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+//3-12-Creating the Issue Model
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//1-As a reminder, make sure to use the "Pascal naming convention".So we 
+//capitalize the first letter of each word and also make sure to use 
+//singular names.
+
+//2-Now when we use MySQL, the type of the related column in our database
+//is going to be varchar(191).It means we can store string values up to 
+//191 characters in these columns.We can override it by using @db 
+//attribute.
+
+//3-if you want to have really "long descriptions",So for that we use 
+//@db.Text.
+
+model Issue {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  status      Status   @default(OPEN)
+  creatdAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Status {
+  OPEN
+  In_PROGRESS
+  CLOSED
+}
+
+//4-Now every issue has to have a "status" and the "status" can be one 
+//of three values, "open", "in progress" and "closed".We can use an 
+//"enum" class to represent that.
+
+//5-An "enum" is a special "class" that represents a group of constants 
+//(unchangeable variables).Enums allow a developer to define a set of
+//named constants. Using enums can make it easier to document intent, 
+//or create a set of distinct cases. TypeScript provides both numeric 
+//and string-based enums.
+
+//6-Just remember that "enums" are supported in "MySQL" but not necessarily
+//in all "database engines".So if you use a different provider, look at 
+//the Prisma documentation to make sure that "enums" are supported.
+
+//7-With "@updatedAt attribute"  every time an issue record is updated,
+//the database engine automatically updates the value of this column in 
+//database

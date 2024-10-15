@@ -1,8 +1,7 @@
-// 6-47-Removing Duplicate Skeletons
+//6-45-Handling Errors
 
 "use client"
 
-import { Spinner } from '@/app/components'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -11,33 +10,13 @@ import React, { useState } from 'react'
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 
     const router = useRouter()
+    //2-
     const [error, setError] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
-
-
-    const deleteIssueHandler = async () => {
-        try {
-            setIsDeleting(true)
-            await axios.delete("/api/issues/" + issueId)
-            //3-We have to change the url to "/issues/list"
-            //Go to issues/_components/IssueForm copy 5.tsx
-            router.push("/issues/list")
-            router.refresh()
-        }
-        catch (error) {
-            setIsDeleting(false)
-            setError(true)
-        }
-    }
 
     return (
-        <AlertDialog.Root>
+        <>        <AlertDialog.Root>
             <AlertDialog.Trigger>
-                <Button color='red'
-                    disabled={isDeleting}>
-                    Delete Issue
-                    {isDeleting && <Spinner />}
-                </Button>
+                <Button color='red'>Delete Issue</Button>
             </AlertDialog.Trigger>
             <AlertDialog.Content>
                 <AlertDialog.Title>
@@ -52,11 +31,34 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                         <Button color='gray' variant='soft'>Cancel</Button>
                     </AlertDialog.Cancel>
                     <AlertDialog.Action>
-                        <Button onClick={deleteIssueHandler} color='red'>Delete Issue</Button>
+                        <Button onClick={async () => {
+                            //1-what if something goes wrong when we 
+                            //delete a button by calling the backend?We 
+                            //should use "try catch block" for "handeling 
+                            //errors".
+                            try {
+                                //6-to simulate an error, we can throw an
+                                //error here.
+                                //throw new Error()
+                                await axios.delete("/api/issues/" + issueId)
+                                router.push("/issues")
+                                router.refresh()
+                            }
+                            catch (error) {
+                                //3-
+                                setError(true)
+                            }
+                        }} color='red'>Delete Issue</Button>
                     </AlertDialog.Action>
                 </Flex>
             </AlertDialog.Content>
-
+        </AlertDialog.Root>
+            {/* 4-Then we create a "error box" by "alert dialog component" 
+            from RadixUI without it's "Trigger component "   */}
+            {/* 5-we wanna show this error box if we have error.this
+             "Root component" has a prop called "open".if it's true this
+             "error box" is shown if not it is not shown.We set it to
+             our "error state"*/}
             <AlertDialog.Root open={error}>
                 <AlertDialog.Content>
                     <AlertDialog.Title>
@@ -65,13 +67,15 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                     <AlertDialog.Description>
                         This issue could not be deleted.
                     </AlertDialog.Description>
+                    {/* 7-For removig the "error box" we should set error
+                    to false for "ok button" of our error box. */}
                     <Button mt="3" color='gray' variant='soft'
                         onClick={() => setError(false)} >OK</Button>
                 </AlertDialog.Content>
             </AlertDialog.Root>
-
-        </AlertDialog.Root>
+        </>
     )
 }
+// Go to DeleteIssueButton Copy 5.tsx
 
 export default DeleteIssueButton

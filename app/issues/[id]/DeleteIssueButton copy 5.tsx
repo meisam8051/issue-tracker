@@ -1,8 +1,7 @@
-// 6-47-Removing Duplicate Skeletons
+//6-45-Handling Errors
 
 "use client"
 
-import { Spinner } from '@/app/components'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -12,20 +11,16 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 
     const router = useRouter()
     const [error, setError] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
 
-
+    //8-this function has a few lines of code, I would prefer to move it
+    //outside of "our delete button" in "confirmation box".
     const deleteIssueHandler = async () => {
         try {
-            setIsDeleting(true)
             await axios.delete("/api/issues/" + issueId)
-            //3-We have to change the url to "/issues/list"
-            //Go to issues/_components/IssueForm copy 5.tsx
-            router.push("/issues/list")
+            router.push("/issues")
             router.refresh()
         }
         catch (error) {
-            setIsDeleting(false)
             setError(true)
         }
     }
@@ -33,11 +28,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
     return (
         <AlertDialog.Root>
             <AlertDialog.Trigger>
-                <Button color='red'
-                    disabled={isDeleting}>
-                    Delete Issue
-                    {isDeleting && <Spinner />}
-                </Button>
+                <Button color='red'>Delete Issue</Button>
             </AlertDialog.Trigger>
             <AlertDialog.Content>
                 <AlertDialog.Title>
@@ -52,6 +43,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
                         <Button color='gray' variant='soft'>Cancel</Button>
                     </AlertDialog.Cancel>
                     <AlertDialog.Action>
+                        {/* 8- */}
                         <Button onClick={deleteIssueHandler} color='red'>Delete Issue</Button>
                     </AlertDialog.Action>
                 </Flex>

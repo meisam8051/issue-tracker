@@ -1,4 +1,4 @@
-// 6-47-Removing Duplicate Skeletons
+//5-39-Understanding Caching
 "use client"
 
 import { ErrorMessage, Spinner } from '@/app/components';
@@ -6,14 +6,20 @@ import { IssuesSchema } from '@/app/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Callout, TextField, Button } from '@radix-ui/themes';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import "easymde/dist/easymde.min.css";
 import { Issue } from '@prisma/client';
-import SimpleMDE from 'react-simplemde-editor';
 
+
+
+const SimpleMDE = dynamic(
+    () => import("react-simplemde-editor"),
+    { ssr: false }
+)
 
 type IssueFormData = z.infer<typeof IssuesSchema>
 
@@ -42,11 +48,12 @@ const IssueForm = ({ issue }: Props) => {
                 await axios.patch("/api/issues/" + issue.id, data)
             else
                 await axios.post("/api/issues", data)
-            //4-We should change the URL to "/issues/list"
-            //Go back to 6-47-Removing Duplicate Skeletons
-            router.push("/issues/list")
-            //--------
+            router.push("/issues")
+            //3-After we send the user to the "issues page",we tells next
+            //JS to refresh the content of the current route, which is in 
+            //this case, the issues route with this refresh().
             router.refresh()
+            //----------------
         } catch (error) {
             setIsSubmitting(false)
             setError("Unexpected error has occurred!")
