@@ -1,4 +1,4 @@
-//5-41-Adding a Delete Button
+//7-51-Adding the Login and Logout Links
 import '@radix-ui/themes/styles.css'
 import "./theme-config.css"
 import './globals.css'
@@ -7,6 +7,7 @@ import { Container, Theme } from "@radix-ui/themes"
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
+import AuthProvider from './auth/Provider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,16 +28,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Theme accentColor="violet">
-          <NavBar />
-          <main className='px-5'>
-            {/* 12-Here we wrap our pages inside the container component.
-             */}
-            <Container>
-              {children}
-            </Container>
-          </main>
-        </Theme>
+      {/* 2----- */}
+        <AuthProvider>
+          <Theme accentColor="violet">
+            <NavBar />
+            <main className='px-5'>
+              <Container>
+                {children}
+              </Container>
+            </main>
+          </Theme>
+        </AuthProvider>
+        {/* ------- */}
       </body>
     </html>
   )
