@@ -1,4 +1,4 @@
-//7-53-Adding a Drop-down Menu
+//7-54-Troubleshooting- Avatar Not Loading
 
 "use client"
 
@@ -50,41 +50,29 @@ const NavBar = () => {
                     </Flex>
                     <Box>
                         {status === "authenticated" &&
-                            //1-Here we use the Dropdown menu from radix-ui
-                            //(fig 53-2)
                             <DropdownMenu.Root>
                                 <DropdownMenu.Trigger>
-                                    {/*2-Here we know that session.user
-                                     is defined because status is 
-                                     authenticated.So here we add an 
-                                     exclamation mark.
-                                     The src can be string or undefined 
-                                     but the image property can be string 
-                                     or null or undefined.So we use
-                                     an exclamation mark to fix that */}
+                             
                                     <Avatar
                                         src={session.user!.image!}
-                                        //3-we should also set fallback to 
-                                        //something that will be displayed
-                                        //if the user doesn't have an image.
                                         fallback="?"
-                                        //4-We use size prop to make our 
-                                        //avatar smaller
                                         size="2"
-                                        //5-We use radius and set it to full
-                                        //for making it look round.
                                         radius='full'
                                         className="cursor-pointer"
+                                        //1-We have a prop for setting
+                                        //the Refer policy, but this is
+                                        //kind of flaky.Sometimes it works.
+                                        //Sometimes it doesn't.
+                                        //Go to next.config.js
+                                        referrerPolicy='no-referrer'
                                     />
                                 </DropdownMenu.Trigger>
                                 <DropdownMenu.Content>
-                                    {/* 6-label for showing the user email */}
                                     <DropdownMenu.Label>
                                         <Text size="2">
                                             {session.user!.email}
                                         </Text>
                                     </DropdownMenu.Label>
-                                    {/* 7-here we shows our items. */}
                                     <DropdownMenu.Item>
                                         <Link href="/api/auth/signout">Logout</Link>
                                     </DropdownMenu.Item>
