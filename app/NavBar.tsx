@@ -1,4 +1,4 @@
-//7-52-Change the Layout of the NavBar
+//7-53-Adding a Drop-down Menu
 
 "use client"
 
@@ -10,7 +10,7 @@ import { PiButterflyDuotone } from "react-icons/pi";
 
 import classnames from 'classnames';
 import { useSession } from 'next-auth/react';
-import { Box, Container, Flex } from '@radix-ui/themes';
+import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
 
 const NavBar = () => {
 
@@ -24,14 +24,8 @@ const NavBar = () => {
         { label: "Issues", href: "/issues/list" }
     ]
 
-    //1-So here we have a bunch of tailwind classes.So now going forward,
-    //we want to simplify this code.We want to replace some of these 
-    //tailwind classes with radix UI components.
-    //So we remove the flex class, space-x-6,items-center from our nav tag.
     return (
         <nav className='border-b mb-5 px-5 py-3'>
-            {/* 2-We use continer tag from radix ui to bring our navbar 
-            in the middle of our page. */}
             <Container>
                 <Flex justify="between">
                     <Flex align="center" gap="3">
@@ -56,7 +50,47 @@ const NavBar = () => {
                     </Flex>
                     <Box>
                         {status === "authenticated" &&
-                            <Link href="/api/auth/signout">Logout</Link>}
+                            //1-Here we use the Dropdown menu from radix-ui
+                            //(fig 53-2)
+                            <DropdownMenu.Root>
+                                <DropdownMenu.Trigger>
+                                    {/*2-Here we know that session.user
+                                     is defined because status is 
+                                     authenticated.So here we add an 
+                                     exclamation mark.
+                                     The src can be string or undefined 
+                                     but the image property can be string 
+                                     or null or undefined.So we use
+                                     an exclamation mark to fix that */}
+                                    <Avatar
+                                        src={session.user!.image!}
+                                        //3-we should also set fallback to 
+                                        //something that will be displayed
+                                        //if the user doesn't have an image.
+                                        fallback="?"
+                                        //4-We use size prop to make our 
+                                        //avatar smaller
+                                        size="2"
+                                        //5-We use radius and set it to full
+                                        //for making it look round.
+                                        radius='full'
+                                        className="cursor-pointer"
+                                    />
+                                </DropdownMenu.Trigger>
+                                <DropdownMenu.Content>
+                                    {/* 6-label for showing the user email */}
+                                    <DropdownMenu.Label>
+                                        <Text size="2">
+                                            {session.user!.email}
+                                        </Text>
+                                    </DropdownMenu.Label>
+                                    {/* 7-here we shows our items. */}
+                                    <DropdownMenu.Item>
+                                        <Link href="/api/auth/signout">Logout</Link>
+                                    </DropdownMenu.Item>
+                                </DropdownMenu.Content>
+                            </DropdownMenu.Root>
+                        }
                         {status === "unauthenticated" &&
                             <Link href="/api/auth/signin">Login</Link>}
                     </Box>
