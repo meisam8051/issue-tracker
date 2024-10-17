@@ -1,4 +1,4 @@
-//7-54-Troubleshooting- Avatar Not Loading
+//7-55-Refactoring the NavBar
 
 "use client"
 
@@ -12,17 +12,8 @@ import classnames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes';
 
+
 const NavBar = () => {
-
-
-    const { status, data: session } = useSession()
-
-    const currentPath = usePathname()
-
-    const links = [
-        { label: "Dashboard", href: "/" },
-        { label: "Issues", href: "/issues/list" }
-    ]
 
     return (
         <nav className='border-b mb-5 px-5 py-3'>
@@ -30,63 +21,83 @@ const NavBar = () => {
                 <Flex justify="between">
                     <Flex align="center" gap="3">
                         <Link href="/"><PiButterflyDuotone /></Link>
-                        <ul className='flex space-x-6'>
-                            {links.map((link) =>
-                                <li key={link.href}>
-                                    <Link
-                                        className={
-                                            classnames({
-                                                "text-zinc-900": currentPath === link.href,
-                                                "text-zinc-500": currentPath !== link.href,
-                                                "hover:text-zinc-800 transition-colors": true
-                                            })
-                                        }
-                                        href={link.href}>{link.label}
-                                    </Link>
-                                </li>
-                            )
-                            }
-                        </ul>
+                    <NavLinks/>
                     </Flex>
-                    <Box>
-                        {status === "authenticated" &&
-                            <DropdownMenu.Root>
-                                <DropdownMenu.Trigger>
-                             
-                                    <Avatar
-                                        src={session.user!.image!}
-                                        fallback="?"
-                                        size="2"
-                                        radius='full'
-                                        className="cursor-pointer"
-                                        //1-We have a prop for setting
-                                        //the Refer policy, but this is
-                                        //kind of flaky.Sometimes it works.
-                                        //Sometimes it doesn't.
-                                        //Go to next.config.js
-                                        referrerPolicy='no-referrer'
-                                    />
-                                </DropdownMenu.Trigger>
-                                <DropdownMenu.Content>
-                                    <DropdownMenu.Label>
-                                        <Text size="2">
-                                            {session.user!.email}
-                                        </Text>
-                                    </DropdownMenu.Label>
-                                    <DropdownMenu.Item>
-                                        <Link href="/api/auth/signout">Logout</Link>
-                                    </DropdownMenu.Item>
-                                </DropdownMenu.Content>
-                            </DropdownMenu.Root>
-                        }
-                        {status === "unauthenticated" &&
-                            <Link href="/api/auth/signin">Login</Link>}
-                    </Box>
+                <AuthStatus/>
                 </Flex>
             </Container>
         </nav >
     )
 }
 
+const AuthStatus = () => {
+    const { status, data: session } = useSession()
+
+    if (status === "loading") return null;
+
+    if (status === "unauthenticated")
+        //9-
+        return <Link className='nav-link' href="/api/auth/signin">Login</Link>
+    return (
+        <Box>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Avatar
+                        src={session!.user!.image!}
+                        fallback="?"
+                        size="2"
+                        radius='full'
+                        className="cursor-pointer"
+                        referrerPolicy='no-referrer'
+                    />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Label>
+                        <Text size="2">
+                            {session!.user!.email}
+                        </Text>
+                    </DropdownMenu.Label>
+                    <DropdownMenu.Item>
+                        <Link href="/api/auth/signout">Logout</Link>
+                    </DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+        </Box >
+    )
+}
+
+
+const NavLinks = () => {
+    const currentPath = usePathname()
+
+    const links = [
+        { label: "Dashboard", href: "/" },
+        { label: "Issues", href: "/issues/list" }
+    ]
+    return (
+        <ul className='flex space-x-6'>
+            {links.map((link) =>
+                <li key={link.href}>
+                    <Link
+                        className={
+                            classnames({
+                                //9-
+                                "nav-link": true,
+                                //Here we have conflict between two 
+                                //classes "nav-link" and "text-zink-900" .
+                                //For solving that we use ! mark to 
+                                //overwrite text-zinc-900 to "nav-link".
+                                "!text-zinc-900": currentPath === link.href,
+                            })
+                        }
+                        href={link.href}>{link.label}
+                    </Link>
+                </li>
+            )
+            }
+        </ul>
+    )
+
+}
 
 export default NavBar

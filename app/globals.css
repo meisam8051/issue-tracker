@@ -1,4 +1,4 @@
-/* 2-7-Creating the project */
+/* 7-55-Refactoring the NavBar */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,3 +16,13 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+
+/* 8-we define a layer for creating a bunch of utility classes.  */
+@layer utilities {
+  /* we give our custom utility a random name. */
+  .nav-link {
+    /*Here we apply a bunch of tailwind classes to our custom utility.  */
+    @apply text-zinc-500 hover:text-zinc-800 transition-colors;
+  }
+}
+/* Go to NavBar copy 13.tsx */
