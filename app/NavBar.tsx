@@ -1,4 +1,4 @@
-//7-55-Refactoring the NavBar
+//7-56-Adding a Loading Skeleton
 
 "use client"
 
@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import React from 'react'
 import { PiButterflyDuotone } from "react-icons/pi";
+import { Skeleton } from "@/app/components/index"
 
 
 import classnames from 'classnames';
@@ -21,9 +22,9 @@ const NavBar = () => {
                 <Flex justify="between">
                     <Flex align="center" gap="3">
                         <Link href="/"><PiButterflyDuotone /></Link>
-                    <NavLinks/>
+                        <NavLinks />
                     </Flex>
-                <AuthStatus/>
+                    <AuthStatus />
                 </Flex>
             </Container>
         </nav >
@@ -33,10 +34,11 @@ const NavBar = () => {
 const AuthStatus = () => {
     const { status, data: session } = useSession()
 
-    if (status === "loading") return null;
+    //1-
+    if (status === "loading")
+        return <Skeleton width="3rem" />;
 
     if (status === "unauthenticated")
-        //9-
         return <Link className='nav-link' href="/api/auth/signin">Login</Link>
     return (
         <Box>
@@ -81,12 +83,7 @@ const NavLinks = () => {
                     <Link
                         className={
                             classnames({
-                                //9-
                                 "nav-link": true,
-                                //Here we have conflict between two 
-                                //classes "nav-link" and "text-zink-900" .
-                                //For solving that we use ! mark to 
-                                //overwrite text-zinc-900 to "nav-link".
                                 "!text-zinc-900": currentPath === link.href,
                             })
                         }
