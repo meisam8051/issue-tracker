@@ -1,4 +1,4 @@
-//5-41-Adding a Delete Button
+//7-57-Securing the Application
 import prisma from '@/prisma/client'
 import { Box, Grid, Flex } from '@radix-ui/themes'
 import delay from 'delay'
@@ -6,11 +6,23 @@ import { notFound } from 'next/navigation'
 import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
 import DeleteIssueButton from './DeleteIssueButton'
+import { getServerSession } from 'next-auth'
+import authOption from '@/app/auth/authOption'
 
 interface Props {
     params: { id: string }
 }
 const IssueDetailPage = async ({ params }: Props) => {
+    //4-We don't have a separate page for deleting issues, so to secure 
+    //our application, we should hide delete and also edit button from 
+    //anonymous users.
+
+    //5-we call get server session to get the current user session.And for
+    //argument we have to pass the object that we use for initializing 
+    //next auth.
+    //Go to api/auth/[...nextauth]/route copy 4.tsx
+    const session = await getServerSession(authOption)
+
 
     const issue = await prisma.issue.findUnique({
         where: { id: parseInt(params.id) }
@@ -21,32 +33,25 @@ const IssueDetailPage = async ({ params }: Props) => {
 
 
     await delay(2000)
-    //10-(fig 41-8)on tablets, our buttons are way too wide.So we apply 
-    //a two column layout on tablets as well.For that we have to change 
-    //our break points.We want to apply "five columns" to "small devices", 
-    //that is tablets in "RadixUI".And apply "col-span-4" to "medium 
-    //devices" in "Tailwind".
+
 
     return (
         <Grid columns={{ initial: "1", sm: "5" }} gap="5" >
             <Box className='md:col-span-4'>
                 <IssueDetails issue={issue} />
             </Box>
-            <Box>
+            {/* 8-here we use session to render our buttons if it 
+            exists(fig 57-1)
+             Go to api/issues/route copy 5.ts
+            */}
+            {session && <Box>
                 <Flex direction="column" gap="4">
                     <EditIssueButton issueId={issue.id} />
                     <DeleteIssueButton issueId={issue.id} />
                 </Flex>
-            </Box>
+            </Box>}
         </Grid>
     )
 }
-//11-with the current implementation as the screen gets wider, so does 
-//our page.This is not ideal for this kind of application.For this kind
-//of application, it would be better to have all the content in the center
-//of the screen.
-//And to do that, we use "the container component" in "Redix UI".So the 
-//container component applies a max width to our page and puts the 
-//content in the center.
-//Go to app/layout copy 6.tsx
+
 export default IssueDetailPage

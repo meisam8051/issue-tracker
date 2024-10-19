@@ -1,13 +1,20 @@
-// 6-46-Improving the User Experience
+//7-57-Securing the Application
+
+import authOption from "@/app/auth/authOption";
 import { IssuesSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import delay from "delay";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  //11-
+  const session = await getServerSession(authOption);
+  if (!session) return NextResponse.json({}, { status: 401 });
+  //------------
   const body = await request.json();
   const validation = IssuesSchema.safeParse(body);
   if (!validation.success)
@@ -35,9 +42,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  //1-We use delay function to simulate deleting process in real app.
-  //Go to app/issues/[id]/DeleteIssueButton copy 6.tsx
-  //await delay(2000);
+  //12-
+  const session = await getServerSession(authOption);
+  if (!session) return NextResponse.json({}, { status: 401 });
+  //Thenwe can test it with postman.
 
   const issue = await prisma.issue.findUnique({
     where: {
