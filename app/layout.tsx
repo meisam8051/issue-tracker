@@ -1,4 +1,4 @@
-//7-51-Adding the Login and Logout Links
+//7-60-Setting Up React Query
 import '@radix-ui/themes/styles.css'
 import "./theme-config.css"
 import './globals.css'
@@ -8,6 +8,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
 import AuthProvider from './auth/Provider'
+import QueryClientProvider from '@/app/QueryClientProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,18 +29,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-      {/* 2----- */}
-        <AuthProvider>
-          <Theme accentColor="violet">
-            <NavBar />
-            <main className='px-5'>
-              <Container>
-                {children}
-              </Container>
-            </main>
-          </Theme>
-        </AuthProvider>
-        {/* ------- */}
+        {/* 6-we wrap everything inside the body element with 
+        QueryClientProvider. */}
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme accentColor="violet">
+              <NavBar />
+              <main className='px-5'>
+                <Container>
+                  {children}
+                </Container>
+              </main>
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
