@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-//7-50-Adding the Prisma Adapter
+//7-62-Add Assigned Issues to Prisma Schema
 
 generator client {
   provider = "prisma-client-js"
@@ -12,14 +12,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
+// 1-here to connect Issue to User models,we use One-to-many relations.
+//One-to-many (1-n) relations refer to relations where one record on one 
+//side of the relation can be connected to zero or more records on the 
+//other side.
 model Issue {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String   @db.Text
-  status      Status   @default(OPEN)
-  creatdAt    DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  title            String   @db.VarChar(255)
+  description      String   @db.Text
+  status           Status   @default(OPEN)
+  creatdAt         DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  //1-We define a foreign key to create a relation between two tables.
+  //our foreign key here is assignedToUserId.The type of this has to be a 
+  //string because here we want to store a "user ID".we want to make this
+  //optional because not all issues are assigned to users.
+  //the string type in MySQL maps to a var char of 191.So for 
+  //consistency, once again, we want to use the db attribute to change 
+  //the type of the underlying column in our database.
+  assignedToUserId String?  @db.VarChar(255)
+  //2-we should also create a relationship between the issue and the user
+  //models.To do that we define a Relation field.
+  //Relation fields define connections between models at the Prisma ORM 
+  //level and do not exist in the database.they are fields on a Prisma 
+  //model that do not have a scalar type. Instead, their type is another 
+  //model.
+  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
+  //3-here we want to use the relation attribute to add a relationship 
+  //between these two models,the Issue and User models.every relationship 
+  //has two ends.So here we have to specify what fields in this model 
+  //should be mapped to the fields in the user model.
+
+  //4-So In @relation we set the fields property to the array of fields in 
+  //the Issue model.So we want to map this field assignedToUserId to the 
+  //ID field in the user model.
+  //So after fields,we add references property and we set this to the array 
+  //of fields in the target model.In this case, the user model.
 }
 
 enum Status {
@@ -28,55 +56,65 @@ enum Status {
   CLOSED
 }
 
-//3-------------
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
- 
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@map("sessions")
 }
- 
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
- 
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime? @map("email_verified")
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  //5-whenever we add a relationship in a model, we have to add the 
+  //reverse relation in the other model.So a user can have a bunch of 
+  //assigned issues.we add a field for that and type it the array of 
+  //Issue
+  assignedIssues Issue[]
+
   @@map("users")
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
-//Go back to api/auth/[...nextauth]/route copy 3.ts 
+
+//6-for formatting we can use ->npx prisma format or use ctrl+shift+p
+//to run command pallete and search for Format Document.The first time 
+//you make it ask what format you want to use, make sure to install the
+//prettier format extension for that.
+
+//7-then create a migration: ->npx prisma migrate dev
