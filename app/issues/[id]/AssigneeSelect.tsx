@@ -1,4 +1,4 @@
-//7-64-Assigning an Issue to a User 
+//8-65-Showing Toast Notifications 
 
 "use client"
 
@@ -8,8 +8,10 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import React from 'react'
 import { Skeleton } from "@/app/components"
+//1-Import the toast object and the Toaster component.
+import toast, { Toaster } from "react-hot-toast"
 
-//5-we get it and type it
+
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
 
@@ -27,37 +29,49 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
 
     return (
-        <Select.Root
-        //10-When the page loads we want to show the currently assigned 
-        //user.For that we use defaultValue prop.If this value is truthy, 
-        //we're going to use that, otherwise if it's null, we use an 
-        //empty string.So the unassigned item gets selected.
-            defaultValue={issue.assignedToUserId || ""}
-            onValueChange={(userId) => {
-                axios.patch("/api/issues/" + issue.id, { 
-                    //9-For unassigning when we select the unassigned item,
-                    //userId equals to empty string and that is falsy 
-                    //value for assignedToUserId.we add null to unassign
-                    //issue.(fig 64-4 64-5)
-                    assignedToUserId: userId || null })
-           
-           }}>
-            <Select.Trigger placeholder='Assign...' />
-            <Select.Content>
-                <Select.Group>
-                    <Select.Label>Suggestions</Select.Label>
-                    {/*8-For unassigning an issue,First we add an item 
-                    before the list of users.We set the value to an 
-                    empty string, we cannot set it to null, that's not 
-                    acceptable.  */}
-                    <Select.Item value="" >Unassigned</Select.Item>
-                    {users?.map((user) => {
-                        return (<Select.Item key={user.id}
-                            value={user.id}>{user.name}</Select.Item>)
-                    })}
-                </Select.Group>
-            </Select.Content>
-        </Select.Root>
+        <>
+            <Select.Root
+                defaultValue={issue.assignedToUserId || ""}
+                onValueChange={(userId) => {
+                    //3-to handle errors, here we have to await this patch 
+                    //call so we can wrap it in a Try-Catch block.Or instead
+                    //we can use catch method to get an error.
+                    axios.patch("/api/issues/" + issue.id, {
+                        assignedToUserId: userId || null
+                    })
+                        .catch(
+                            //4-we pass a callback function to it
+                            () => { 
+                            //in this function we use the Toast 
+                            //object that we imported on the top to show 
+                            //an error.So here we call the error method 
+                            //and provide a message.
+                            toast.error("Changes could not be saved.") 
+                        })
+                        //5-To simulate it we change the url of patch
+                        //method.(fig 65-1)
+                        //6-you have full control over customizing the 
+                        //toast notification in terms of the duration 
+                        //and look and feel.Go to 
+                        //https://react-hot-toast.com/
+
+                }}>
+                <Select.Trigger placeholder='Assign...' />
+                <Select.Content>
+                    <Select.Group>
+                        <Select.Label>Suggestions</Select.Label>
+                        <Select.Item value="" >Unassigned</Select.Item>
+                        {users?.map((user) => {
+                            return (<Select.Item key={user.id}
+                                value={user.id}>{user.name}</Select.Item>)
+                        })}
+                    </Select.Group>
+                </Select.Content>
+            </Select.Root>
+            {/* 2-somewhere in this component we have to add this Toaster 
+        component as a container for showing a Toast notification. */}
+            <Toaster />
+        </>
     )
 }
 
