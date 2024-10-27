@@ -1,4 +1,5 @@
-//7-58-Building the Assignee Select Component
+//7-64-Assigning an Issue to a User 
+
 
 import prisma from '@/prisma/client'
 import { Box, Grid, Flex } from '@radix-ui/themes'
@@ -36,9 +37,12 @@ const IssueDetailPage = async ({ params }: Props) => {
             </Box>
             {session && <Box>
                 <Flex direction="column" gap="4">
-                    <AssigneeSelect/>
+                {/* 4----- */}
+                    <AssigneeSelect issue={issue}/>
+                    {/* Go back to app/issues/[id]/AssigneeSelect copy 5.tsx */}
                     <EditIssueButton issueId={issue.id} />
                     <DeleteIssueButton issueId={issue.id} />
+
                 </Flex>
             </Box>}
         </Grid>
