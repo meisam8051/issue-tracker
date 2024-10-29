@@ -1,18 +1,51 @@
-//5-39-Understanding Caching
+//9-68-Filtering Issues
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
 import React from 'react'
 import { Link, IssueStatusBadge } from "@/app/components"
 import delay from "delay"
 import IssueAction from './IssueActions'
+import { Status } from '@prisma/client'
+
+//3-to filter issues by their status, we should pass the status as a 
+//query parameter to this component or to this page.
+
+//4-
+interface Props {
+  searchParams: {
+    status: Status
+  }
+}
 
 
-const IssuePage = async () => {
+const IssuePage = async ({ searchParams }: Props) => {
 
-
+  // console.log(searchParams.status)
   await delay(2000)
 
-  const issues = await prisma.issue.findMany()
+  //5-If a user send an invalid status in the URL.We get an error.For solving
+  //we need to validate the status before passing it to Prisma.
+
+  const statuses = Object.values(Status)
+  //6-console.log(statuses)//When we get the values of type Status we get 
+  //an array of our statuses (fig 68-1)
+
+  //7-Now to validate the status, we have to check to see if the status 
+  //that is passed is one of the valid values in this array.
+  const status = statuses.includes(searchParams.status) ?
+    searchParams.status : undefined
+  //8-If you pass undefined to Prisma, Prisma will not include that 
+  //status as part of filtering.
+
+//9-
+  const issues = await prisma.issue.findMany({
+    where: {
+      status
+    }
+  })
+
+  //10-So if we pass a wrong status quary parameter, we get all the 
+  //issues(fig 68-2)
 
   return (
     <div>
@@ -51,21 +84,8 @@ const IssuePage = async () => {
   )
 }
 
-//1-For rendering our issue page,dynamically,here we export a constant
-//called 'dynamic' and set it to "force-dynamic",then rebuild our 
-//application.(fig 39-7)
-//Now if users create a new issue they can't see that in issues page but 
-//with a refresh they can see it.(fig 39-8 39-9)That is because of a 
-//diffrent kind of cache, named "client cache".  
-export const dynamic = "force-dynamic" 
+export const dynamic = "force-dynamic"
 
-//2-Another option to export is the "revalidate option".If we set this to
-//"zero", this is exactly the same as setting "dynamic" to "force dynamic".
-//So we are telling next JS that the output of this page has to be 
-//revalidated every zero seconds, meaning all the time.With this we can
-//give it a time for rerendering issues page.
-// export const revalidate = 0;
-//Go back to 5-39-Understanding Caching
 
 
 export default IssuePage
