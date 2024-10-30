@@ -1,51 +1,47 @@
-//9-68-Filtering Issues
+//9-69-Making Columns Sortable
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
 import React from 'react'
 import { Link, IssueStatusBadge } from "@/app/components"
 import delay from "delay"
 import IssueAction from './IssueActions'
-import { Status } from '@prisma/client'
+import { Issue, Status } from '@prisma/client'
+import NextLink from "next/link"
+import { ArrowUpIcon } from '@radix-ui/react-icons'
 
-//3-to filter issues by their status, we should pass the status as a 
-//query parameter to this component or to this page.
-
-//4-
 interface Props {
   searchParams: {
-    status: Status
+    status: Status,
+    //6-We should also add the orderBy query parameter here.
+    orderBy: keyof Issue
   }
 }
 
 
 const IssuePage = async ({ searchParams }: Props) => {
 
-  // console.log(searchParams.status)
-  await delay(2000)
-
-  //5-If a user send an invalid status in the URL.We get an error.For solving
-  //we need to validate the status before passing it to Prisma.
 
   const statuses = Object.values(Status)
-  //6-console.log(statuses)//When we get the values of type Status we get 
-  //an array of our statuses (fig 68-1)
 
-  //7-Now to validate the status, we have to check to see if the status 
-  //that is passed is one of the valid values in this array.
   const status = statuses.includes(searchParams.status) ?
     searchParams.status : undefined
-  //8-If you pass undefined to Prisma, Prisma will not include that 
-  //status as part of filtering.
 
-//9-
   const issues = await prisma.issue.findMany({
     where: {
       status
     }
   })
 
-  //10-So if we pass a wrong status quary parameter, we get all the 
-  //issues(fig 68-2)
+  const columns: {
+    label: string,
+    value: keyof Issue,
+    className?: string
+  }[] = [
+      { label: "Issue", value: "title" },
+      { label: "Status", value: "status", className: 'hidden md:table-cell' },
+      { label: "Created", value: "creatdAt", className: 'hidden md:table-cell' }
+    ]
+
 
   return (
     <div>
@@ -53,16 +49,37 @@ const IssuePage = async ({ searchParams }: Props) => {
       <Table.Root variant='surface' >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Created</Table.ColumnHeaderCell>
+            {columns.map(column =>
+              <Table.ColumnHeaderCell
+                key={column.value}
+                className={column.className}
+              >
+                {/* 5-To solve this problem, instead of sending href to a
+                 string, we should set it to an object. */}
+                <NextLink
+                  href={{
+                    //In this object, we set the query parameter to an 
+                    //object.But here first we spread our search params
+                    // to copy all the existing parameters and then we 
+                    //can override the orderBy parameter
+                    query: { ...searchParams, orderBy: column.value }
+                  }}
+                >
+                  {column.label}
+                </NextLink>
+                {/* 6-To give user the visual feedback, we should add 
+                  an icon. */}
+                {column.value === searchParams.orderBy
+                  && <ArrowUpIcon className='inline' />}
+              </Table.ColumnHeaderCell>
+            )}
+
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {issues.map((issue) =>
             <Table.Row key={issue.id}>
               <Table.Cell>
-
                 <Link
                   href={`/issues/${issue.id}`}
                 >{issue.title}
