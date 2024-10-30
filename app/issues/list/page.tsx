@@ -1,4 +1,4 @@
-//9-69-Making Columns Sortable
+//9-70-Sorting Issues
 import prisma from '@/prisma/client'
 import { Table } from '@radix-ui/themes'
 import React from 'react'
@@ -12,25 +12,12 @@ import { ArrowUpIcon } from '@radix-ui/react-icons'
 interface Props {
   searchParams: {
     status: Status,
-    //6-We should also add the orderBy query parameter here.
     orderBy: keyof Issue
   }
 }
 
 
 const IssuePage = async ({ searchParams }: Props) => {
-
-
-  const statuses = Object.values(Status)
-
-  const status = statuses.includes(searchParams.status) ?
-    searchParams.status : undefined
-
-  const issues = await prisma.issue.findMany({
-    where: {
-      status
-    }
-  })
 
   const columns: {
     label: string,
@@ -41,6 +28,30 @@ const IssuePage = async ({ searchParams }: Props) => {
       { label: "Status", value: "status", className: 'hidden md:table-cell' },
       { label: "Created", value: "creatdAt", className: 'hidden md:table-cell' }
     ]
+
+
+
+  const statuses = Object.values(Status)
+
+  const status = statuses.includes(searchParams.status) ?
+    searchParams.status : undefined
+
+    //4-For preventing to set invalid value to orderBy query parameter 
+    //manually,we validate our searchParams.
+    const validateOrderBy =columns.map(column=>column.value)
+
+    //3-So, to solve this, we have to properly create this object before 
+    //passing it to Prisma.The same way we computed the status.
+  const orderBy =validateOrderBy.includes(searchParams.orderBy) ?
+    { [searchParams.orderBy]: "asc" } : undefined
+
+  const issues = await prisma.issue.findMany({
+    where: {
+      status
+    },
+    orderBy: orderBy
+  })
+
 
 
   return (
@@ -54,21 +65,13 @@ const IssuePage = async ({ searchParams }: Props) => {
                 key={column.value}
                 className={column.className}
               >
-                {/* 5-To solve this problem, instead of sending href to a
-                 string, we should set it to an object. */}
                 <NextLink
                   href={{
-                    //In this object, we set the query parameter to an 
-                    //object.But here first we spread our search params
-                    // to copy all the existing parameters and then we 
-                    //can override the orderBy parameter
                     query: { ...searchParams, orderBy: column.value }
                   }}
                 >
                   {column.label}
                 </NextLink>
-                {/* 6-To give user the visual feedback, we should add 
-                  an icon. */}
                 {column.value === searchParams.orderBy
                   && <ArrowUpIcon className='inline' />}
               </Table.ColumnHeaderCell>
