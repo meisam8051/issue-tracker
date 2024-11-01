@@ -1,12 +1,11 @@
-// 9-68-Filtering Issues
+// 9-71-Fix Filtering Bugs
 
 
 "use client"
 
 import { Status } from '@prisma/client'
 import { Select } from '@radix-ui/themes'
-import { useRouter } from 'next/navigation'
-import { stat } from 'node:fs'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 const statuses: {
@@ -20,20 +19,35 @@ const statuses: {
     ]
 
 const IssueStatusFilter = () => {
-    //2-So we call use router.
+
     const router = useRouter()
 
-    //1-when the user selects a status, we should pass that status as a 
-    //query parameter in the URL of the page.
+    const searchParams = useSearchParams()
 
     return (
         <Select.Root
-            //2-
+        //6-The other issue we have here is that the filter that we 
+        //select here, like open, doesn't get set if we refresh the 
+        //page.To solve that we have to set the defaultValue prop.
+        //(fig 71-3)
+        //Here if we don't have a status, then we should set the default 
+        //value to an empty string, So the first item, which is All get 
+        //selected.
+        defaultValue={searchParams.get("status") || ""}
             onValueChange=
             {(status) => {
-                const query = status ? "?status=" + status : ""
-                //2-here we need to use the next JS router to redirect 
-                //the user.
+
+                const params = new URLSearchParams()
+                if (status)
+                    params.append("status", status)
+                if (searchParams.get("orderBy"))
+                    params.append("orderBy", searchParams.get("orderBy")!)
+
+
+                const currentSearchParams = searchParams.get("orderBy")
+                console.log(currentSearchParams)
+
+                const query = params.size ? "?"+params.toString() : ""
                 router.push(`/issues/list${query}`)
             }}>
             <Select.Trigger placeholder="Filter by status..." />
@@ -50,6 +64,6 @@ const IssueStatusFilter = () => {
         </Select.Root>
     )
 }
-//Go to issues/list/page copy 17.tsx
+
 
 export default IssueStatusFilter
