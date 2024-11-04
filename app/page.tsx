@@ -1,10 +1,14 @@
-//9-73-Building the Pagination Component
+//9-74-Implementing Pagination
 import Pagination from "./components/Pagination";
 
-export default function Home() {
+//5-Here instead of hard coding, the current page, we should read this 
+//from query parameters.
+export default function Home(
+  { searchParams }:
+    { searchParams: { page: string } }) {
   return (
-   <Pagination itemCount={100} pageSize={10} currentPage={7}/>
+    <Pagination itemCount={100} pageSize={10}
+      currentPage={parseInt(searchParams.page) || 1} />
   )
 }
 
-//Go back to app/components/pagination copy 2.tsx

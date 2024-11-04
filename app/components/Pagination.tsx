@@ -1,51 +1,70 @@
+// 9-74-Implementing Pagination
+
+//4-Because we use hooks and onClick event,we have to change this 
+//component,client component.
+"use client"
+//Go to app/page copy 4.tsx
+
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 
-//1-our pagination component needs a few props.
+
 interface Props {
-    itemCount: number,//For total number of items. 
-    pageSize: number,//the number of items to show on each page.
+    itemCount: number,
+    pageSize: number,
     currentPage: number,
 }
 
 const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
-    //3-we have to compute the total pages based on the item count and 
-    //page size.because the result of this division might be a floating
-    //point number, here we have to use Math.ceil to properly calculate 
-    //the total number of pages.
+
+    //1-
+    const router = useRouter();//For updating the current URL.
+    const searchParams = useSearchParams();//To access current query 
+    //parameters.Because as part of passing the current page to the URL, 
+    //we don't want to clear the existing parameters.
+
     const pageCount = Math.ceil(itemCount / pageSize)
-    //If we have one or zero page, we want to prevent rendering 
-    //pagination.
     if (pageCount <= 1) return null
 
+    //2-Now let's define a function for updating the current page.
+    const changePage = (page: number) => {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set("page", page.toString())
+        //Here we are only updating the query string, not the endpoint.
+        router.push(`?${params}`)
+    }
+
+
     return (
-        //2-we want to use a flex container because we want to lay out a 
-        //bunch of buttons horizontally.
         <Flex align="center" gap="2">
             <Text size="2">
                 page {currentPage} of {pageCount}
             </Text>
-            {/* 4-We need buttons for going to previous and next pages.
-            this button is for going to the first page */}
-            <Button color='gray'
-                //we want to disable this button if we are on the first page.
-                variant='soft' disabled={currentPage === 1}>
+            <Button color='gray' variant='soft'
+                disabled={currentPage === 1}
+                // 3-
+                onClick={() => changePage(1)}>
                 <DoubleArrowLeftIcon />
             </Button>
-            {/* This button is for going to the previous page */}
-            <Button color='gray' variant='soft' disabled={currentPage === 1}>
+            <Button color='gray' variant='soft'
+                disabled={currentPage === 1}
+                //3-
+                onClick={() => changePage(currentPage - 1)}>
                 <ChevronLeftIcon />
             </Button>
-            {/* this button is for going to the next page */}
-            <Button color='gray'
-            //we should disable this button if we are on the last page.
-                variant='soft' disabled={currentPage === pageCount}>
+            <Button color='gray' variant='soft'
+                disabled={currentPage === pageCount}
+                //3-
+                onClick={() => changePage(currentPage + 1)}>
                 <ChevronRightIcon />
             </Button>
-            {/* this button is for going to the last page */}
-            <Button color='gray' variant='soft' disabled={currentPage === pageCount}>
+            <Button color='gray' variant='soft'
+                disabled={currentPage === pageCount}
+                //3-
+                onClick={() => changePage(pageCount)}>
                 <DoubleArrowRightIcon />
             </Button>
         </Flex>
