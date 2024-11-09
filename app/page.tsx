@@ -1,7 +1,7 @@
-//10-78-Building the IssueSummary Component
+//10-79-Building the BarChart Component
 
 import prisma from "@/prisma/client";
-import IssueSummary from "./IssueSummary";
+import IssueChart from "./IssueChart";
 
 
 
@@ -9,8 +9,6 @@ import IssueSummary from "./IssueSummary";
 
 export default async function Home() {
 
-  //7-we get the numbers of issues that have the status open,closed and
-  //inProgress then give them to our IsuueSummary component.fig(78-1) 
   const open = await prisma.issue.count({
     where:{
       status:"OPEN"
@@ -28,7 +26,8 @@ export default async function Home() {
   })
 
   return (
-    <IssueSummary open={open} closed={closed} inProgress={inProgress}/>
+    //9-(figure 79-1)
+    <IssueChart open={open} closed={closed} inProgress={inProgress}/>
   )
 }
-
+//Go to IssueChart copy 2.tsx 
