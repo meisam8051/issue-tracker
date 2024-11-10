@@ -1,10 +1,12 @@
-//9-76-Refactoring
+//11-81-Adding Metadata
+
 import Pagination from '@/app/components/Pagination'
 import prisma from '@/prisma/client'
 import { Status } from '@prisma/client'
 import { Flex } from '@radix-ui/themes'
 import IssueAction from './IssueActions'
 import IssueTable, { columnNames, IssueQuery } from './IssueTable'
+import { Metadata } from 'next'
 
 interface Props {
   searchParams: IssueQuery
@@ -40,8 +42,6 @@ const IssuePage = async ({ searchParams }: Props) => {
 
 
   return (
-    //9-For fixing the layout issue we use Flex component
-    //Go to app/issues/list/IssueActions copy 3.tsx
     <Flex direction='column' gap="3">
       <IssueAction />
       <IssueTable issues={issues} searchParams={searchParams} />
@@ -52,6 +52,11 @@ const IssuePage = async ({ searchParams }: Props) => {
 
 export const dynamic = "force-dynamic"
 
-
+//2-
+export const metadata:Metadata ={
+  title:"Issue Tracker - Issue List",
+  description:"View all project issues"
+}
+//Go to app/issues/[id]/page copy 16.tsx
 
 export default IssuePage
