@@ -1,10 +1,12 @@
-//3-12-Building an API
 
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
+  return new PrismaClient({
+    log:["query"]
+  })
 }
+
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
