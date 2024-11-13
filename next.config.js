@@ -1,27 +1,14 @@
-// 7-54-Troubleshooting- Avatar Not Loading
 /** @type {import('next').NextConfig} */
 
-//2-If the referrerPolicy='no-referrer' doesn't work
 const nextConfig = {
-  //In this config object, we can specify the HTTP headers that we want to
-  //set.
-  //Here we add an async function called headers.
   async headers() {
-    //In this function, we return an array of headers that we want to apply.
     return [
-      //Each header is an object with two properties,
       {
-        //with this we specify a path or a path pattern for applying a
-        //bunch of headers.
-        //* means zero or more parameters after / essentially with this
-        //pattern represent all endpoints of our application.
         source: "/:path*",
-        //Next we set headers to an array of objects.Each header should
-        //have two properties, a key and a value.
         headers: [
           {
             key: "referrer-policy",
-            value: "no-referre",
+            value: "no-referrer",
           },
         ],
       },
@@ -29,8 +16,50 @@ const nextConfig = {
   },
 };
 
-//3-this is an advanced solution.
-//Now whenever we change "this configuration file", we have to restart our 
-//web server.
+
 
 module.exports = nextConfig;
+
+// Injected content via Sentry wizard below
+
+const { withSentryConfig } = require("@sentry/nextjs");
+
+module.exports = withSentryConfig(module.exports, {
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options
+
+  org: "mmg-5z",
+  project: "issue-tracker",
+
+  // Only print logs for uploading source maps in CI
+  silent: !process.env.CI,
+
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
+
+  // Automatically annotate React components to show their full name in breadcrumbs and session replay
+  reactComponentAnnotation: {
+    enabled: true,
+  },
+
+  // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+  // This can increase your server load as well as your hosting bill.
+  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+  // side errors will fail.
+  // tunnelRoute: "/monitoring",
+
+  // Hides source maps from generated client bundles
+  hideSourceMaps: true,
+
+  // Automatically tree-shake Sentry logger statements to reduce bundle size
+  disableLogger: true,
+
+  // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+  // See the following for more information:
+  // https://docs.sentry.io/product/crons/
+  // https://vercel.com/docs/cron-jobs
+  automaticVercelMonitors: true,
+});
