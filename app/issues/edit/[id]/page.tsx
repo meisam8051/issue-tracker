@@ -1,9 +1,4 @@
-//5-40- Improving the Loading Experience
-
-//10-Here we do all the things we did in new page. 
-
 import React from 'react'
-// import IssueForm from '../../_components/IssueForm'
 import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
 import dynamic from 'next/dynamic'

@@ -4,8 +4,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/prisma/client";
 import { NextAuthOptions } from "next-auth";
 
-//7-we should also annotate the authOption with type NextAuthOptions that 
-//defines in next-auth.  
 const authOption: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -18,7 +16,5 @@ const authOption: NextAuthOptions = {
     strategy: "jwt",
   },
 };
-
-//Go to api/auth/[...nextauth]/route copy 5.tsx
 
 export default authOption;

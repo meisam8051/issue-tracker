@@ -1,5 +1,3 @@
-//11-81-Adding Metadata
-
 import Pagination from '@/app/components/Pagination'
 import prisma from '@/prisma/client'
 import { Status } from '@prisma/client'
@@ -51,12 +49,10 @@ const IssuePage = async ({ searchParams }: Props) => {
 }
 
 export const dynamic = "force-dynamic"
-
-//2-
 export const metadata:Metadata ={
   title:"Issue Tracker - Issue List",
   description:"View all project issues"
 }
-//Go to app/issues/[id]/page copy 16.tsx
+
 
 export default IssuePage

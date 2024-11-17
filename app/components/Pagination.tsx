@@ -1,9 +1,5 @@
-// 9-74-Implementing Pagination
-
-//4-Because we use hooks and onClick event,we have to change this 
-//component,client component.
 "use client"
-//Go to app/page copy 4.tsx
+
 
 import { ChevronLeftIcon, ChevronRightIcon, DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
@@ -20,20 +16,16 @@ interface Props {
 
 const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
 
-    //1-
-    const router = useRouter();//For updating the current URL.
-    const searchParams = useSearchParams();//To access current query 
-    //parameters.Because as part of passing the current page to the URL, 
-    //we don't want to clear the existing parameters.
+  
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const pageCount = Math.ceil(itemCount / pageSize)
     if (pageCount <= 1) return null
 
-    //2-Now let's define a function for updating the current page.
     const changePage = (page: number) => {
         const params = new URLSearchParams(searchParams.toString())
         params.set("page", page.toString())
-        //Here we are only updating the query string, not the endpoint.
         router.push(`?${params}`)
     }
 
@@ -45,25 +37,21 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
             </Text>
             <Button color='gray' variant='soft'
                 disabled={currentPage === 1}
-                // 3-
                 onClick={() => changePage(1)}>
                 <DoubleArrowLeftIcon />
             </Button>
             <Button color='gray' variant='soft'
                 disabled={currentPage === 1}
-                //3-
                 onClick={() => changePage(currentPage - 1)}>
                 <ChevronLeftIcon />
             </Button>
             <Button color='gray' variant='soft'
                 disabled={currentPage === pageCount}
-                //3-
                 onClick={() => changePage(currentPage + 1)}>
                 <ChevronRightIcon />
             </Button>
             <Button color='gray' variant='soft'
                 disabled={currentPage === pageCount}
-                //3-
                 onClick={() => changePage(pageCount)}>
                 <DoubleArrowRightIcon />
             </Button>

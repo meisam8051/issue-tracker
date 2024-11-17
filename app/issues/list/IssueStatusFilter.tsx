@@ -1,6 +1,3 @@
-// 9-71-Fix Filtering Bugs
-
-
 "use client"
 
 import { Status } from '@prisma/client'
@@ -26,13 +23,6 @@ const IssueStatusFilter = () => {
 
     return (
         <Select.Root
-        //6-The other issue we have here is that the filter that we 
-        //select here, like open, doesn't get set if we refresh the 
-        //page.To solve that we have to set the defaultValue prop.
-        //(fig 71-3)
-        //Here if we don't have a status, then we should set the default 
-        //value to an empty string, So the first item, which is All get 
-        //selected.
         defaultValue={searchParams.get("status") || ""}
             onValueChange=
             {(status) => {

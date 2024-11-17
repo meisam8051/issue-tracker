@@ -1,4 +1,3 @@
-//7-60-Setting Up React Query
 import '@radix-ui/themes/styles.css'
 import "./theme-config.css"
 import './globals.css'
@@ -29,8 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        {/* 6-we wrap everything inside the body element with 
-        QueryClientProvider. */}
         <QueryClientProvider>
           <AuthProvider>
             <Theme accentColor="violet">

@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-//7-62-Add Assigned Issues to Prisma Schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 1-here to connect Issue to User models,we use One-to-many relations.
-//One-to-many (1-n) relations refer to relations where one record on one 
-//side of the relation can be connected to zero or more records on the 
-//other side.
 model Issue {
   id               Int      @id @default(autoincrement())
   title            String   @db.VarChar(255)
@@ -23,31 +14,8 @@ model Issue {
   status           Status   @default(OPEN)
   creatdAt         DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  //1-We define a foreign key to create a relation between two tables.
-  //our foreign key here is assignedToUserId.The type of this has to be a 
-  //string because here we want to store a "user ID".we want to make this
-  //optional because not all issues are assigned to users.
-  //the string type in MySQL maps to a var char of 191.So for 
-  //consistency, once again, we want to use the db attribute to change 
-  //the type of the underlying column in our database.
   assignedToUserId String?  @db.VarChar(255)
-  //2-we should also create a relationship between the issue and the user
-  //models.To do that we define a Relation field.
-  //Relation fields define connections between models at the Prisma ORM 
-  //level and do not exist in the database.they are fields on a Prisma 
-  //model that do not have a scalar type. Instead, their type is another 
-  //model.
   assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
-  //3-here we want to use the relation attribute to add a relationship 
-  //between these two models,the Issue and User models.every relationship 
-  //has two ends.So here we have to specify what fields in this model 
-  //should be mapped to the fields in the user model.
-
-  //4-So In @relation we set the fields property to the array of fields in 
-  //the Issue model.So we want to map this field assignedToUserId to the 
-  //ID field in the user model.
-  //So after fields,we add references property and we set this to the array 
-  //of fields in the target model.In this case, the user model.
 }
 
 enum Status {
@@ -94,10 +62,6 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
-  //5-whenever we add a relationship in a model, we have to add the 
-  //reverse relation in the other model.So a user can have a bunch of 
-  //assigned issues.we add a field for that and type it the array of 
-  //Issue
   assignedIssues Issue[]
 
   @@map("users")
@@ -112,9 +76,3 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-//6-for formatting we can use ->npx prisma format or use ctrl+shift+p
-//to run command pallete and search for Format Document.The first time 
-//you make it ask what format you want to use, make sure to install the
-//prettier format extension for that.
-
-//7-then create a migration: ->npx prisma migrate dev

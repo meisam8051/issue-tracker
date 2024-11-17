@@ -1,11 +1,8 @@
-//4-33-Refactoring- Organizing Imports
 import { Table } from '@radix-ui/themes'
 import React from 'react'
 import IssueAction from './IssueActions'
-
-//11-
 import {Skeleton} from "@/app/components/index"
-//Go to isues/new/loading.tsx
+
 
 const loadingIssuePage = () => {
     const issues = [1, 2, 3, 4, 5]

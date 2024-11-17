@@ -1,5 +1,3 @@
-//11-81-Adding Metadata
-
 import prisma from "@/prisma/client";
 import IssueChart from "./IssueChart";
 import { Flex, Grid } from "@radix-ui/themes";
@@ -38,15 +36,7 @@ export default async function Home() {
     </Grid>
   )
 }
-//1-For title and description for our page we use metadata constant.
-//Make sure to spell metadata properly, because this is one of the 
-//constants that NextJS looks for.
 export const metadata:Metadata ={
   title:"Issue Tracker - Dashboard",
   description:"View a summary of project issues"
 }
-//At a minimum, we should provide a title and a description, but it's 
-//also better to add open graph and Twitter properties.So people can 
-//easily share our content on social media.
-
-//Go to app/issues/list/page copy 25.tsx 

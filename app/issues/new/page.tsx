@@ -1,5 +1,3 @@
-
-
 import dynamic from "next/dynamic"
 import IssueFormSkeleton from "../_components/IssueFormSkeleton"
 

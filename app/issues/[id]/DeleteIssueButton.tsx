@@ -1,5 +1,3 @@
-// 6-47-Removing Duplicate Skeletons
-
 "use client"
 
 import { Spinner } from '@/app/components'
@@ -19,8 +17,6 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
         try {
             setIsDeleting(true)
             await axios.delete("/api/issues/" + issueId)
-            //3-We have to change the url to "/issues/list"
-            //Go to issues/_components/IssueForm copy 5.tsx
             router.push("/issues/list")
             router.refresh()
         }

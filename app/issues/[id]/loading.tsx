@@ -1,12 +1,7 @@
-//4-33-Refactoring- Organizing Imports
-
 import { Flex, Card, Box } from '@radix-ui/themes';
 import React from 'react'
-
-
-//10-
 import { Skeleton } from "@/app/components"
-//we have to apply the same refactoring to our other loading files.
+
 
 
 const LoadingIssueDetailPage = () => {

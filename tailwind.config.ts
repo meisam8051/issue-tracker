@@ -1,4 +1,3 @@
-// 4-29-Adding Markdown Preview
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -16,8 +15,6 @@ const config: Config = {
       },
     },
   },
-  //1------------
-  //Go to issues/[id]/page copy 5.tsx
   plugins: [require('@tailwindcss/typography')],
 }
 export default config

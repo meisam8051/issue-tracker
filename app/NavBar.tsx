@@ -1,5 +1,3 @@
-//7-56-Adding a Loading Skeleton
-
 "use client"
 
 import Link from 'next/link'
@@ -33,8 +31,6 @@ const NavBar = () => {
 
 const AuthStatus = () => {
     const { status, data: session } = useSession()
-
-    //1-
     if (status === "loading")
         return <Skeleton width="3rem" />;
 

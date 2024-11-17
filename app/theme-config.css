@@ -1,7 +1,4 @@
- /* 3-16-Customizing Radix UI Theme */
 .radix-themes {
     --default-font-family: var(--font-inter) !important;
   }
   
-  /* 7-and finally, we have to import this file in our root layout 
-  Go to layout copy 5.tsx*/

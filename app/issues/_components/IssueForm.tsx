@@ -1,4 +1,3 @@
-// 6-47-Removing Duplicate Skeletons
 "use client"
 
 import { ErrorMessage, Spinner } from '@/app/components';
@@ -42,10 +41,7 @@ const IssueForm = ({ issue }: Props) => {
                 await axios.patch("/api/issues/" + issue.id, data)
             else
                 await axios.post("/api/issues", data)
-            //4-We should change the URL to "/issues/list"
-            //Go back to 6-47-Removing Duplicate Skeletons
             router.push("/issues/list")
-            //--------
             router.refresh()
         } catch (error) {
             setIsSubmitting(false)
