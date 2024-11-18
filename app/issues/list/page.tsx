@@ -20,7 +20,7 @@ const IssuePage = async ({ searchParams }: Props) => {
 
 
   const orderBy = columnNames.includes(searchParams.orderBy) ?
-    { [searchParams.orderBy]: "asc" } : undefined
+    { [searchParams.orderBy]: "desc" } : undefined
 
   const where = { status }
 
@@ -29,7 +29,7 @@ const IssuePage = async ({ searchParams }: Props) => {
 
   const issues = await prisma.issue.findMany({
     where: where,
-    orderBy: orderBy,
+    orderBy: orderBy || {creatdAt:'desc'},
     skip: (page - 1) * pageSize,
     take: pageSize
 
