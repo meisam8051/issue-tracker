@@ -2,6 +2,7 @@ import { IssueStatusBadge } from '@/app/components'
 import { Issue, Status } from '@prisma/client'
 import { ArrowUpIcon } from '@radix-ui/react-icons'
 import { Table } from '@radix-ui/themes'
+import classNames from 'classnames'
 import { default as Link, default as NextLink } from 'next/link'
 
 export interface IssueQuery {
@@ -52,10 +53,12 @@ const IssueTable = ({ searchParams, issues }: Props) => {
                             </div>
                         </Table.Cell>
 
-                        <Table.Cell className='hidden md:table-cell'>
+                        <Table.Cell className='hidden sm:table-cell' >
                             <IssueStatusBadge status={issue.status} />
+                        </Table.Cell >
+                        <Table.Cell className='hidden sm:table-cell'>
+                            {issue.creatdAt.toDateString()}
                         </Table.Cell>
-                        <Table.Cell className='hidden md:table-cell'>{issue.creatdAt.toDateString()}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
@@ -69,8 +72,8 @@ const columns: {
     className?: string
 }[] = [
         { label: "Issue", value: "title" },
-        { label: "Status", value: "status", className: 'hidden md:table-cell' },
-        { label: "Created", value: "creatdAt", className: 'hidden md:table-cell' }
+        { label: "Status", value: "status", className: 'hidden sm:table-cell' },
+        { label: "Created", value: "creatdAt", className: 'hidden sm:table-cell' }
     ]
 
 export const columnNames = columns.map(column => column.value)

@@ -5,11 +5,14 @@ import { Issue, User } from '@prisma/client'
 import { Select } from '@radix-ui/themes'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { useRouter } from "next/navigation"
 
 import toast, { Toaster } from "react-hot-toast"
 
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
+
+    const router = useRouter()
 
     const { data: users, error, isLoading } = useUser()
 
@@ -25,7 +28,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
                 () => {
                     toast.error("Changes could not be saved.")
                 })
-
+        router.replace("/issues/"+issue.id)
     }
 
 
